@@ -2,11 +2,12 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import Home from './src/Screens/Home'
 import Card from './src/Component/Card'
+import Search from './src/Screens/Search'
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <ScrollView>
+      {/* <ScrollView>
       <Home/>
       <Card/>
       <Card/>
@@ -14,7 +15,8 @@ export default function App() {
       <Card/>
       <Card/>
       <Card/>
-      </ScrollView>
+      </ScrollView> */}
+      <Search/>
       
     </View>
   );

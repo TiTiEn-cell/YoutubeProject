@@ -4,6 +4,8 @@ import Home from './src/Screens/Home'
 import Card from './src/Component/Card'
 import Search from './src/Screens/Search'
 
+//https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=song&type=video&key=AIzaSyAkR64LHntE29CluL5A6NOjZp-pwqRZ3oo
+
 export default function App() {
   return (
     <View style={styles.container}>
@@ -16,7 +18,13 @@ export default function App() {
       <Card/>
       <Card/>
       </ScrollView> */}
+
+      <ScrollView>
       <Search/>
+      
+      </ScrollView>
+      
+      
       
     </View>
   );

@@ -1,8 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image } from 'react-native';
-import {AntDesign, EvilIcons, FontAwesome5} from '@expo/vector-icons'
+import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
+import {AntDesign, EvilIcons, FontAwesome5} from '@expo/vector-icons';
+import Card from '../Component/Card';
 
-export default function HomeScreen() {
+
+export default function HomeScreen({navigation}) {
   return (
     <View style={styles.container}>
         <View style = {styles.header}>    
@@ -12,7 +14,9 @@ export default function HomeScreen() {
             </View>
   
             <View style = {styles.rightHeader}>
-                <EvilIcons style = {styles.iconSearch} name = 'search' size={32} color={'black'}/>
+                <EvilIcons style = {styles.iconSearch} name = 'search' size={32} color={'black'}
+                onPress={()=>navigation.navigate('Search')}
+                />
                 <Image source={require('../image/UserIcon.png')} style = {styles.imageUser}/>
             </View>
 
@@ -25,8 +29,16 @@ export default function HomeScreen() {
                 <Text style = {styles.textArrangeGame}>Trò chơi</Text>
             </View> 
         
-
+          
+          <ScrollView>
+            <Card/>
+            <Card/>
+            <Card/>
+            <Card/>
+            <Card/>
+          </ScrollView>
     </View>
+   
     
     
   );
@@ -34,7 +46,8 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
     container:{
-        flex: 1
+        flex: 1,
+        backgroundColor: 'white'
     },
     header: {
       backgroundColor: 'white',

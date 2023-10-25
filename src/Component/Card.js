@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     video:{
+        
         width: '100%',
         height: 218,
         marginBottom: 5,

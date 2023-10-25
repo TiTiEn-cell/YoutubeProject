@@ -5,13 +5,15 @@ import { useState } from 'react';
 import Card from '../Component/Card';
 
 
-export default function App() {
+export default function Search({navigation}) {
     const [text, setText] = useState("");
     const [cardData, setCardData] = useState([]);
+    const [channelData, setChannelData] = useState([]);
     const [loading, setLoading] = useState(false);
+
     const fetchData = ()=>{
         setLoading(true)
-        fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=100&q=${text}&type=video&key=AIzaSyAkR64LHntE29CluL5A6NOjZp-pwqRZ3oo`)
+        fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=${text}&type=video&key=AIzaSyAkR64LHntE29CluL5A6NOjZp-pwqRZ3oo`)
         .then((res)=>res.json())
         .then((data)=>{
             console.log(data)
@@ -22,7 +24,9 @@ export default function App() {
   return (
     <View style = {styles.container}>
 <View style={styles.header}>
-        <Ionicons style = {styles.iconBack} name='arrow-back' size={32}/>
+        <Ionicons style = {styles.iconBack} name='arrow-back' size={32}
+        onPress={()=>navigation.goBack()}
+        />
         <TextInput 
         style = {styles.textInput}
         onChangeText={(text) => setText(text)}
@@ -42,8 +46,7 @@ export default function App() {
                 videoId = {item.id.videoId}
                 title = {item.snippet.title}
                 channel = {item.snippet.channelTitle}
-                channelId = {item.snippet.channelId}
-                
+                channelId = {item.snippet.channelId}             
             />        
         }}
         keyExtractor = {item => item.id.videoId}

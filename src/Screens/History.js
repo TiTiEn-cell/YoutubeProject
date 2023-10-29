@@ -6,8 +6,8 @@ import Header from '../Component/Header';
 export default function History() {
   return (
     <View style={styles.container}>
-<View>
-        <Header/>
+        <View>
+          <Header/>
         </View>
     </View>
     

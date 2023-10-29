@@ -5,7 +5,7 @@ import Card from '../Component/Card';
 import Header from '../Component/Header'
 
 
-export default function HomeScreen({navigation}) {
+export default function HomeScreen() {
   return (
     <View style={styles.container}>
         <View>

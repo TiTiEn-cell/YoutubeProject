@@ -5,7 +5,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from './src/Screens/Home'
-import Card from './src/Component/Card'
 import Search from './src/Screens/Search'
 import ChannelSub from './src/Screens/ChannelSub'
 import History from './src/Screens/History';
@@ -38,8 +37,8 @@ const mainHome =()=>{
   })}
 >
     <Tabs.Screen name='Home' component={Home} options={{ headerShown: false }}/>
-    <Tabs.Screen name='Channel Sub' component={ChannelSub} />
-    <Tabs.Screen name='History' component={History} />
+    <Tabs.Screen name='Channel Sub' component={ChannelSub} options={{ headerShown: false }}/>
+    <Tabs.Screen name='History' component={History} options={{ headerShown: false }}/>
   </Tabs.Navigator>
   )
   

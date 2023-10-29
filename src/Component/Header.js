@@ -1,10 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import {AntDesign, EvilIcons, FontAwesome5} from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 
-
-export default function HomeScreen({navigation}) {
+export default function Header() {
+    const navigation = useNavigation();
   return (
     <View style={styles.container}>
                <View style = {styles.header}>    
@@ -18,9 +19,7 @@ export default function HomeScreen({navigation}) {
                 onPress={()=>navigation.navigate('Search')}
                 />
                 <Image source={require('../image/UserIcon.png')} style = {styles.imageUser}/>
-            </View>
-
-             
+            </View>    
       </View>
     </View>
    

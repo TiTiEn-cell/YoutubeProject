@@ -2,27 +2,17 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import {AntDesign, EvilIcons, FontAwesome5} from '@expo/vector-icons';
 import Card from '../Component/Card';
+import Header from '../Component/Header'
 
 
 export default function HomeScreen({navigation}) {
   return (
     <View style={styles.container}>
-        <View style = {styles.header}>    
-            <View style = {styles.leftHeader}>
-                <AntDesign style = {styles.iconYoutube} name = 'youtube' size = {32} color = 'red'/>
-                <Text style = {styles.textYoutube}>YouTube</Text>
-            </View>
-  
-            <View style = {styles.rightHeader}>
-                <EvilIcons style = {styles.iconSearch} name = 'search' size={32} color={'black'}
-                onPress={()=>navigation.navigate('Search')}
-                />
-                <Image source={require('../image/UserIcon.png')} style = {styles.imageUser}/>
-            </View>
-
-             
-      </View>
-      <View style = {styles.underHeader}>
+        <View>
+        <Header/>
+        </View>
+        
+        <View style = {styles.underHeader}>
                 <FontAwesome5 name = 'compass' size = {28} style = {styles.iconArrange}/>
                 <Text style = {styles.textArrangeAll}>Tất cả</Text>
                 <Text style = {styles.textArrangeMusic}>Âm nhạc</Text>

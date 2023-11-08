@@ -44,7 +44,6 @@ const styles = StyleSheet.create({
     body:{
         marginBottom: 20,
         marginTop: 10,
-        borderWidth: 1,
     },
     video:{
         

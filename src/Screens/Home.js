@@ -19,14 +19,6 @@ export default function HomeScreen() {
                 <Text style = {styles.textArrangeGame}>Trò chơi</Text>
             </View> 
         
-          
-          <ScrollView>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-          </ScrollView>
     </View>
    
     

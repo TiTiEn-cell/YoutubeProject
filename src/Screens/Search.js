@@ -1,14 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, ScrollView, TextInput, FlatList, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Card from '../Component/Card';
 
 
 export default function Search({navigation}) {
     const [text, setText] = useState("");
     const [cardData, setCardData] = useState([]);
-    const [channelData, setChannelData] = useState([]);
     const [loading, setLoading] = useState(false);
 
     const fetchData = ()=>{
@@ -17,10 +16,11 @@ export default function Search({navigation}) {
         .then((res)=>res.json())
         .then((data)=>{
             console.log(data)
-            setLoading(false)
+            setLoading(false)       
             setCardData(data.items)
         })
     }
+
   return (
     <View style = {styles.container}>
 <View style={styles.header}>
@@ -46,11 +46,14 @@ export default function Search({navigation}) {
                 videoId = {item.id.videoId}
                 title = {item.snippet.title}
                 channel = {item.snippet.channelTitle}
-                channelId = {item.snippet.channelId}             
-            />        
+                channelId = {item.snippet.channelId} 
+                thumbnails = {item.snippet.thumbnails.medium.url}    
+                        
+            />    
         }}
         keyExtractor = {item => item.id.videoId}
         />
+
     </View> 
     {loading ?<ActivityIndicator size= 'large' color={'red'} style = {styles.loading}/>:null}
     </View>

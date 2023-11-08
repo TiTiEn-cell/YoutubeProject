@@ -1,13 +1,24 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, Dimensions } from 'react-native';
 import {AntDesign, EvilIcons, FontAwesome5} from '@expo/vector-icons'
+import { TouchableOpacity } from 'react-native-web';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Card(props) {
+      const navigation = useNavigation();
   return (
-    <View style = {styles.body}>
-        <Image source={{uri:`https://i.ytimg.com/vi/${props.videoId}/hqdefault.jpg`}} style = {styles.video}/>
+    <TouchableOpacity 
+    onPress = {()=>navigation.navigate('VideoPlayer',{
+        videoId: props.videoId,
+        title: props.title
+    })}
+    >
+<View style = {styles.body}
+    
+    >
+        <Image source = {props.thumbnails} style = {styles.video}/>
         <View style = {styles.infoVideo}>
-            <Image source={{uri:`https://yt3.ggpht.com/ytc/APkrFKYk1Qx7U6NBA1eyucSFp-HP5iT45SBa6JO-KifR3Q=s88-c-k-c0x00ffffff-no-rj`}} style = {styles.imageUser}/>
+            <Image source= {props.channelBanner} style = {styles.imageUser}/>
             <View>
                 <Text 
                 style = {styles.textTieuDeVideo}
@@ -21,6 +32,8 @@ export default function Card(props) {
         </View>
           
     </View>
+    </TouchableOpacity>
+    
 
 
     
@@ -31,6 +44,7 @@ const styles = StyleSheet.create({
     body:{
         marginBottom: 20,
         marginTop: 10,
+        borderWidth: 1,
     },
     video:{
         

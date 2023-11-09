@@ -31,32 +31,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white'
     },
-    header: {
-      backgroundColor: 'white',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-    },
-    leftHeader:{
-        flexDirection: 'row',
-        margin: 10,
-    },
-    iconYoutube:{
-        marginLeft: 10,
-        marginRight: 5,
-    },
-    textYoutube:{
-        fontSize: 25,
-        fontWeight: 'bold',
-    },
-    rightHeader:{
-        flexDirection: 'row',
-        margin: 10,
-    },
-    imageUser:{
-        width: 30,
-        height: 30,
-        marginLeft: 20,
-    },
     underHeader:{
         flexDirection: 'row',
         marginLeft: 10,
@@ -64,6 +38,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
     },
     iconArrange:{
+        borderRadius: 5,
         textAlign: 'center',
         lineHeight: 40,
         width: 40,

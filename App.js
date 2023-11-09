@@ -50,7 +50,7 @@ export default function App() {
       <Stack.Navigator >
         <Stack.Screen name='MainHome' component={mainHome} options={{ headerShown: false }}/>
         <Stack.Screen name='Search' component={Search} options={{ headerShown: false }}/>
-        <Stack.Screen name='VideoPlayer' component={VideoPlayer} options={{ headerShown: false }}/>
+        <Stack.Screen name='VideoPlayer' component={VideoPlayer}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

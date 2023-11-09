@@ -10,7 +10,8 @@ export default function Card(props) {
     <TouchableOpacity 
     onPress = {()=>navigation.navigate('VideoPlayer',{
         videoId: props.videoId,
-        title: props.title
+        title: props.title,
+        channelName: props.channel
     })}
     >
 <View style = {styles.body}

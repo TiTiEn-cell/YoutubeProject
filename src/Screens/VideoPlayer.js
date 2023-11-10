@@ -1,12 +1,25 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, Dimensions} from 'react-native';
+import { StyleSheet, Text, View, Image, Dimensions, FlatList} from 'react-native';
 import {AntDesign, MaterialCommunityIcons} from '@expo/vector-icons'
 import ReactPlayer from 'react-player';
-import { TouchableOpacity } from 'react-native-web';
+import {  TouchableOpacity } from 'react-native-web';
+import { useEffect, useState } from 'react';
+
 
 export default function VideoPlay({route}) {
   const {videoId, title, channelName} = route.params
+  const [videoData, setVideoData] = useState([]);
+  const fetchData = ()=>{
+    fetch(`https://youtube.googleapis.com/youtube/v3/videos?part=snippet&part=statistics&part=topicDetails&id=${videoId}&maxResults=10&key=AIzaSyAkR64LHntE29CluL5A6NOjZp-pwqRZ3oo`)
+    .then((res)=>res.json())
+    .then((data)=>{     
+        setVideoData(data.items);
+    })
+}
+  useEffect(fetchData,[]);
+
   return (
+    
     <View style={styles.container}>
       <View>
         <ReactPlayer
@@ -16,7 +29,12 @@ export default function VideoPlay({route}) {
         controls={true}
       />
       </View>
-
+      <FlatList
+      data={videoData}
+      renderItem={({item})=>{
+        return(
+        <View>
+        
       <View style = {{
         marginTop: 18,
       }}>
@@ -39,7 +57,7 @@ export default function VideoPlay({route}) {
           fontSize: 15,
           color: 'grey',
         }}>
-          lượt xem  Time
+          {item.statistics.viewCount} lượt xem  {item.snippet.publishedAt}
         </Text>
         <Text>
 
@@ -120,7 +138,7 @@ export default function VideoPlay({route}) {
           <Text style = {{
             marginLeft: 10,
           }}>
-            27N
+            {item.statistics.likeCount}
           </Text>
           </TouchableOpacity>
 
@@ -180,11 +198,19 @@ export default function VideoPlay({route}) {
           marginTop: 10,
           marginLeft: 10,
         }}>
-        Số lượng bình luận
+        {item.statistics.commentCount}
         </Text>
         </View>
         
       </View>
+        </View>
+          
+        )
+      }}
+      />
+      
+
+     
     </View>
     
     

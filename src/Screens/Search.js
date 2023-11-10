@@ -15,7 +15,6 @@ export default function Search({navigation}) {
         fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=${text}&type=video&key=AIzaSyAkR64LHntE29CluL5A6NOjZp-pwqRZ3oo`)
         .then((res)=>res.json())
         .then((data)=>{
-            console.log(data)
             setLoading(false)       
             setCardData(data.items)
         })

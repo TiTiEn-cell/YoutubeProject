@@ -1,15 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, Dimensions } from 'react-native';
 import {AntDesign, EvilIcons, FontAwesome5} from '@expo/vector-icons'
-import { TouchableOpacity } from 'react-native-web';
+import { FlatList, TouchableOpacity } from 'react-native-web';
 import { useNavigation } from '@react-navigation/native';
+import { useState } from 'react';
+import VideoPlayer from '../Screens/VideoPlayer'
 
 export default function Card(props) {
       const navigation = useNavigation();
+      
   return (
     <TouchableOpacity 
-    onPress = {()=>navigation.navigate('VideoPlayer',{
-        videoId: props.videoId,
+    onPress = {()=> navigation.navigate('VideoPlayer',{
+        videoId: props.videoId, 
         title: props.title,
         channelName: props.channel
     })}

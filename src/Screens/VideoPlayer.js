@@ -18,6 +18,18 @@ export default function VideoPlay({route}) {
 }
   useEffect(fetchData,[]);
 
+  const formatNumber = (number) => {
+    if (number >= 1000000000) {
+      return `${(number / 1000000000).toFixed(1)}T`;
+    } else if (number >= 1000000) {
+      return `${(number / 1000000).toFixed(1)}Tr`;
+    } else if (number >= 1000) {
+      return `${(number / 1000).toFixed(1)}N`;
+    } else {
+      return `${number}`;
+    }
+  };
+
   return (
     
     <View style={styles.container}>
@@ -29,9 +41,13 @@ export default function VideoPlay({route}) {
         controls={true}
       />
       </View>
+      <View style = {{
+        marginHorizontal: 10,
+      }}>
       <FlatList
       data={videoData}
       renderItem={({item})=>{
+        item
         return(
         <View>
         
@@ -52,15 +68,21 @@ export default function VideoPlay({route}) {
       
       <View style = {{
         marginTop: 5,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
       }}>
         <Text style ={{
           fontSize: 15,
           color: 'grey',
         }}>
-          {item.statistics.viewCount} lượt xem  {item.snippet.publishedAt}
+          
+          {formatNumber(item.statistics.viewCount)} lượt xem  
         </Text>
-        <Text>
-
+        <Text style ={{
+          fontSize: 15,
+          color: 'grey',
+        }}>
+        {item.snippet.publishedAt}
         </Text>
       </View>
 
@@ -138,7 +160,7 @@ export default function VideoPlay({route}) {
           <Text style = {{
             marginLeft: 10,
           }}>
-            {item.statistics.likeCount}
+            {formatNumber(item.statistics.likeCount)}
           </Text>
           </TouchableOpacity>
 
@@ -198,7 +220,7 @@ export default function VideoPlay({route}) {
           marginTop: 10,
           marginLeft: 10,
         }}>
-        {item.statistics.commentCount}
+        {formatNumber(item.statistics.commentCount)}
         </Text>
         </View>
         
@@ -208,6 +230,8 @@ export default function VideoPlay({route}) {
         )
       }}
       />
+      </View>
+      
       
 
      
@@ -220,7 +244,7 @@ export default function VideoPlay({route}) {
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        marginHorizontal: 10,
+        
     },
   });
   

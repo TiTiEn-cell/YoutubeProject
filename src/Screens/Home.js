@@ -16,7 +16,7 @@ export default function HomeScreen() {
                 <FontAwesome5 name = 'compass' size = {28} style = {styles.iconArrange}/>
                 <Text style = {styles.textArrangeAll}>Tất cả</Text>
                 <Text style = {styles.textArrangeMusic}>Âm nhạc</Text>
-                <Text style = {styles.textArrangeGame}>Trò chơi</Text>
+                {<Text style = {styles.textArrangeGame}>Trò chơi</Text>}
             </View> 
         
     </View>

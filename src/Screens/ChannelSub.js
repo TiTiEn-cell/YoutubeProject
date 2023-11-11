@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image ,FlatList, TouchableOpacity} from 'react-native';
 import {AntDesign, EvilIcons, FontAwesome5} from '@expo/vector-icons'
 import Header from '../Component/Header';
+import { FapTV } from './FapTV';
 
 const Arr=[
   {name:'Fap TV',img:require('../image/FapTVLogo.png'),},
@@ -14,43 +15,44 @@ export default function ChannelSub() {
   return (
     <View style={styles.container}>
         <View style ={{
-            flexDirection: 'row'
-        }}>
+            flexDirection: '',
             
-        
+        }}>
+          <View>
+          <Header/>
+          </View>
+        <View>
+          <Text style={{fontSize:20, marginHorizontal:10,}}><b>Tất cả các kênh đăng ký</b></Text>
+        </View>
       <FlatList
-      numColumns={100}
+      
       data={Arr}
       renderItem={({item})=>(
         <TouchableOpacity style={
             {
-                marginHorizontal:15,
+                marginHorizontal:10,
+                flexDirection:'row',
+                marginBottom: 20,
         }
         }>
             <Image source={item.img} 
             style={{
-                width:55,
-                height:55,
+                width:60,
+                height:60,
+
             }}></Image>
-            <Text>{item.name}</Text>
+            <View style={{justifyContent:'center'}}>
+            <Text style={{fontSize:20,flexDirection:'row-reverse',marginHorizontal:15,}}>{item.name}</Text>
+            </View>
+            
         </TouchableOpacity>
       )}
       />
        <View style={{justifyContent:"center"}}>
-      <Text style={{color:'blue',fontSize:20,}}>Tất cả</Text>
+
       </View>
       </View>
 
-      <View>
-        <View style={{justifyContent:'center'}}>
-          <Image source={require('../image/Video3.png')} style={{width:'300px',height:'200px',alignContent:'center',}} />
-          <Text style={{fontSize:'50'}} ><b>Thoát chết tại Thành Phố Đà Nẵng </b></Text>
-        </View>
-        <View style={{justifyContent:'center'}}>
-          <Image source={require('../image/Video4.png')} style={{width:'300px',height:'200px',alignContent:'center',}} />
-          <Text style={{fontSize:'50'}} ><b>Phân tích Game: Hollow Knight - Hiệp </b> <br/> <b>Sĩ Mặt Nạ | Game Indie - meGame</b> </Text>
-        </View>
-      </View>
     </View>
   );
 }
@@ -58,7 +60,8 @@ export default function ChannelSub() {
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+
     },
   });
   

@@ -1,11 +1,25 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, FlatList, Dimensions, TouchableOpacity } from 'react-native';
 import {AntDesign, EvilIcons, FontAwesome5} from '@expo/vector-icons';
-import Card from '../Component/Card';
 import Header from '../Component/Header'
+import { useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 
-export default function HomeScreen() {
+export default function HomeScreen() {    
+    const navigation = useNavigation();
+    const [videoData, setVideoData] = useState([]);
+    const fetchDataVideo = () =>{
+        fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&type=video&key=AIzaSyAkR64LHntE29CluL5A6NOjZp-pwqRZ3oo`)
+        .then((res)=>res.json())
+        .then((data)=>{
+            console.log(data)
+            setVideoData(data.items);
+        })
+    }
+
+    useEffect(fetchDataVideo,[]);
+
   return (
     <View style={styles.container}>
         <View>
@@ -18,11 +32,50 @@ export default function HomeScreen() {
                 <Text style = {styles.textArrangeMusic}>Âm nhạc</Text>
                 {<Text style = {styles.textArrangeGame}>Trò chơi</Text>}
             </View> 
-        
+
+
+            <FlatList
+            data = {videoData}
+            renderItem={({item})=>{
+                return(
+                    <TouchableOpacity 
+    onPress = {()=> navigation.navigate('VideoPlayer',{
+        videoId: item.id.videoId, 
+        title: item.snippet.title,
+        channelName: item.snippet.channelTitle
+    })}
+    >
+<View style = {{
+    marginBottom: 20,
+    marginTop: 10,
+}}
+    
+    >
+        <Image source = {item.snippet.thumbnails.medium.url} style = {styles.video}/>
+        <View style = {styles.infoVideo}>
+            <Image  style = {styles.imageUser}/>
+            <View>
+                <Text 
+                style = {styles.textTieuDeVideo}
+                ellipsizeMode='tail'
+                numberOfLines={2}
+                >
+                    {item.snippet.title}</Text>    
+                    <View>
+                    <Text style = {styles.textNameChannel}>{item.snippet.channelTitle}</Text>
+                    </View>
+                   
+            </View>
+            
+        </View>
+          
     </View>
-   
-    
-    
+    </TouchableOpacity>
+                )
+            }}
+            />
+        
+    </View>    
   );
 }
 
@@ -72,6 +125,32 @@ const styles = StyleSheet.create({
         fontSize: 20,      
         backgroundColor: '#D9D9D9',
         borderRadius: 10,
+    },
+    video:{
+        
+        width: '100%',
+        height: 218,
+        marginBottom: 5,
+    },
+    infoVideo:{
+        flexDirection: 'row',
+        marginLeft: 10,
+      
+    },
+    imageUser:{
+        borderRadius: 100,
+        width: 40,
+        height: 40,
+        marginRight: 10,
+        marginTop: 5,
+    },
+    textTieuDeVideo:{
+        fontSize: 18,
+        width: Dimensions.get('screen').width - 50
+    },
+    textNameChannel:{
+        fontSize: 13,
+        color: 'grey',
     }
   });
   

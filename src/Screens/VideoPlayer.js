@@ -4,18 +4,37 @@ import {AntDesign, MaterialCommunityIcons} from '@expo/vector-icons'
 import ReactPlayer from 'react-player';
 import {  TouchableOpacity } from 'react-native-web';
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 
 export default function VideoPlay({route}) {
   const {videoId, title, channelName} = route.params
+  
   const [videoData, setVideoData] = useState([]);
+  const [like, setLike] = useState(false);
+  const [disLike, setDislike] = useState(false);
+
   const fetchData = ()=>{
     fetch(`https://youtube.googleapis.com/youtube/v3/videos?part=snippet&part=statistics&part=topicDetails&id=${videoId}&maxResults=10&key=AIzaSyAkR64LHntE29CluL5A6NOjZp-pwqRZ3oo`)
     .then((res)=>res.json())
     .then((data)=>{     
         setVideoData(data.items);
+        console.log(data.items);
     })
 }
+
+// async function likeVideo(){
+//   try {
+//     const response = await axios.post(
+//       `https://youtube.googleapis.com/youtube/v3/videos/rate?id=${videoId}&rating=like&key=AIzaSyAkR64LHntE29CluL5A6NOjZp-pwqRZ3oo`
+//     );
+//     console.log('Like successful:', response.data);
+//   } catch (error) {
+//     console.error('Error liking video:', error);
+//   }
+  
+// }
+
   useEffect(fetchData,[]);
 
   const formatNumber = (number) => {
@@ -30,6 +49,18 @@ export default function VideoPlay({route}) {
     }
   };
 
+  const handleLike = () =>{
+    setLike(!like)
+    if(disLike){
+      setDislike(false);
+    }
+  };
+  const handleDislike = () =>{
+    setDislike(!disLike)
+    if(like){
+      setLike(false);
+    }
+  };
   return (
     
     <View style={styles.container}>
@@ -47,10 +78,8 @@ export default function VideoPlay({route}) {
       <FlatList
       data={videoData}
       renderItem={({item})=>{
-        item
         return(
         <View>
-        
       <View style = {{
         marginTop: 18,
       }}>
@@ -104,10 +133,14 @@ export default function VideoPlay({route}) {
         }}
         />
 
-        <Text style = {{
+        <Text 
+        ellipsizeMode='tail'
+        numberOfLines={1}
+        style = {{
           fontSize: 18,
           marginLeft: 10,
           fontWeight: 'bold',
+          width: Dimensions.get('screen').width/2
         }}>
           {channelName}
         </Text>
@@ -131,7 +164,6 @@ export default function VideoPlay({route}) {
 
         
       </View>
-
       <View style = {{
         marginTop: 18,
         flexDirection: 'row',
@@ -155,12 +187,14 @@ export default function VideoPlay({route}) {
           borderRightWidth: 1,
           justifyContent: 'center',
           alignItems: 'center',
-      }}>
-          <AntDesign name="like2" size={20} color="black" />
+      }}     
+      onPress={()=>handleLike()}
+      >
+          <AntDesign name= {like? "like1": "like2"} size={20} color="black"/>
           <Text style = {{
             marginLeft: 10,
           }}>
-            {formatNumber(item.statistics.likeCount)}
+            {like? formatNumber(item.statistics.likeCount):formatNumber(item.statistics.likeCount)}
           </Text>
           </TouchableOpacity>
 
@@ -172,8 +206,10 @@ export default function VideoPlay({route}) {
             borderBottomRightRadius: 20,
             width: 60,
             height: 30,
-          }}>
-          <AntDesign  name="dislike2" size={20} color="black" />
+          }}
+          onPress = {()=>handleDislike()}
+          >
+          <AntDesign  name={disLike?"dislike1": "dislike2"} size={20} color="black" />
           </TouchableOpacity>
         </View>
 
@@ -187,7 +223,9 @@ export default function VideoPlay({route}) {
           height: 30,
           borderRadius: 20,
           backgroundColor: '#D9D9D9',
-      }}>
+      }}
+     // onPress={copyLink}
+      >
           <MaterialCommunityIcons name="share-outline" size={28} color="black" />          
           <Text>
             Chia sẻ

@@ -5,12 +5,14 @@ import ReactPlayer from 'react-player';
 import {  TouchableOpacity } from 'react-native-web';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import Comment from '../Component/Comment';
 
 
 export default function VideoPlay({route}) {
   const {videoId, title, channelName} = route.params
   
   const [videoData, setVideoData] = useState([]);
+  const [comment, setComment] = useState([])
   const [like, setLike] = useState(false);
   const [disLike, setDislike] = useState(false);
 
@@ -19,7 +21,13 @@ export default function VideoPlay({route}) {
     .then((res)=>res.json())
     .then((data)=>{     
         setVideoData(data.items);
-        console.log(data.items);
+        console.log(data)
+    })
+    fetch(`https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet&part=id&maxResults=50&videoId=${videoId}&key=AIzaSyAkR64LHntE29CluL5A6NOjZp-pwqRZ3oo`)
+    .then((res)=>res.json())
+    .then((data)=>{
+      setComment(data.items)
+      console.log(data)
     })
 }
 
@@ -61,6 +69,12 @@ export default function VideoPlay({route}) {
       setLike(false);
     }
   };
+
+  const handleShare = () =>{
+    navigator.clipboard.writeText(`https://www.youtube.com/watch?v=${videoId}`);
+    alert('Copied');
+  }
+
   return (
     
     <View style={styles.container}>
@@ -224,7 +238,7 @@ export default function VideoPlay({route}) {
           borderRadius: 20,
           backgroundColor: '#D9D9D9',
       }}
-     // onPress={copyLink}
+      onPress={handleShare}
       >
           <MaterialCommunityIcons name="share-outline" size={28} color="black" />          
           <Text>
@@ -263,9 +277,22 @@ export default function VideoPlay({route}) {
         </View>
         
       </View>
+
+      
         </View>
           
         )
+      }}
+      />
+
+      <FlatList
+      data={comment}
+      renderItem={({item})=>{
+        return <Comment
+        Avarta = {item.snippet.topLevelComment.snippet.authorProfileImageUrl}
+        NameChannel = {item.snippet.topLevelComment.snippet.authorDisplayName}
+        Comment = {item.snippet.topLevelComment.snippet.textOriginal}
+        />
       }}
       />
       </View>
@@ -282,7 +309,7 @@ export default function VideoPlay({route}) {
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        
+        backgroundColor: 'white'
     },
   });
   

@@ -10,7 +10,7 @@ import Comment from '../Component/Comment';
 
 export default function VideoPlay({route}) {
   const {videoId, title, channelName} = route.params
-  
+
   const [videoData, setVideoData] = useState([]);
   const [comment, setComment] = useState([])
   const [like, setLike] = useState(false);

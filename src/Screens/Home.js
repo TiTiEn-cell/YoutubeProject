@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     },
     textTieuDeVideo:{
         fontSize: 18,
-        width: Dimensions.get('screen').width - 50
+        width: Dimensions.get('window').width - 50
     },
     textNameChannel:{
         fontSize: 13,

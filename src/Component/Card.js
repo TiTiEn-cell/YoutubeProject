@@ -5,17 +5,37 @@ import { FlatList, TouchableOpacity } from 'react-native-web';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import VideoPlayer from '../Screens/VideoPlayer'
+import History from '../Screens/History';
+
+const url = 'https://65598c87e93ca47020aa4601.mockapi.io/VideoDaXem'
 
 export default function Card(props) {
       const navigation = useNavigation();
       
   return (
     <TouchableOpacity 
-    onPress = {()=> navigation.navigate('VideoPlayer',{
+    onPress = {()=> {
+        
+        fetch(url,{
+            method: 'POST',
+            headers:{
+                'Accept': "application/json",
+                "Content-type": "application/json; charset=UTF-8",
+            },
+            body:JSON.stringify({
+                idVideo: props.videoId,
+                thumbnailURL: props.thumbnails,
+                titleVideo: props.title,
+                channelName: props.channel
+            })
+        })      
+        navigation.navigate('VideoPlayer',{
         videoId: props.videoId, 
         title: props.title,
         channelName: props.channel
-    })}
+    })
+    }  
+    }
     >
 <View style = {styles.body}
     
@@ -69,7 +89,7 @@ const styles = StyleSheet.create({
     },
     textTieuDeVideo:{
         fontSize: 18,
-        width: Dimensions.get('screen').width - 50
+        width: Dimensions.get('window').width - 50
     },
     textNameChannel:{
         fontSize: 13,

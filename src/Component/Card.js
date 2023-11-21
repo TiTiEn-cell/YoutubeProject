@@ -6,36 +6,52 @@ import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import VideoPlayer from '../Screens/VideoPlayer'
 import History from '../Screens/History';
+import { useSelector } from 'react-redux';
 
 const url = 'https://65598c87e93ca47020aa4601.mockapi.io/VideoDaXem'
 
 export default function Card(props) {
       const navigation = useNavigation();
-      
-  return (
-    <TouchableOpacity 
-    onPress = {()=> {
-        
-        fetch(url,{
-            method: 'POST',
+      const Data = useSelector(state=>{
+        return state.id
+      })
+
+      const updateVideoDaXem = async ()=>{
+        const res = await fetch(`https://65598c87e93ca47020aa4601.mockapi.io/Users/${Data}`,{
+            method: 'GET',
+            headers: {
+            'Content-Type': 'application/json',
+        },
+        });
+        const data = await res.json();
+        if(!data.videoDaXem){
+            data.videoDaXem = [];
+        }
+        data.videoDaXem.push({
+            idVideo: props.videoId,
+            thumbnailURL: props.thumbnails,
+            titleVideo: props.title,
+            channelName: props.channel
+        });
+        const updateRes = await fetch(`https://65598c87e93ca47020aa4601.mockapi.io/Users/${Data}`,{
+            method: 'PUT',
             headers:{
                 'Accept': "application/json",
                 "Content-type": "application/json; charset=UTF-8",
             },
-            body:JSON.stringify({
-                idVideo: props.videoId,
-                thumbnailURL: props.thumbnails,
-                titleVideo: props.title,
-                channelName: props.channel
-            })
-        })      
+            body:JSON.stringify(data)
+        })
         navigation.navigate('VideoPlayer',{
-        videoId: props.videoId, 
-        title: props.title,
-        channelName: props.channel
-    })
-    }  
-    }
+            videoId: props.videoId, 
+            title: props.title,
+            channelName: props.channel
+        })
+      }
+
+      
+  return (
+    <TouchableOpacity 
+    onPress = {()=>updateVideoDaXem()}
     >
 <View style = {styles.body}
     

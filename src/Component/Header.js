@@ -1,8 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView,TouchableOpacity } from 'react-native';
 import {AntDesign, EvilIcons, FontAwesome5} from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-
 
 export default function Header() {
     const navigation = useNavigation();
@@ -18,7 +17,12 @@ export default function Header() {
                 <EvilIcons style = {styles.iconSearch} name = 'search' size={32} color={'black'}
                 onPress={()=>navigation.navigate('Search')}
                 />
+                <TouchableOpacity 
+                onPress={()=>navigation.navigate('DangNhap')}
+                >
                 <Image source={require('../image/UserIcon.png')} style = {styles.imageUser}/>
+                </TouchableOpacity>
+                
             </View>    
       </View>
     </View>

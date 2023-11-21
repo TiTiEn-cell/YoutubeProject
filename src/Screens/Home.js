@@ -10,10 +10,9 @@ export default function HomeScreen() {
     const navigation = useNavigation();
     const [videoData, setVideoData] = useState([]);
     const fetchDataVideo = () =>{
-        fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&type=video&key=AIzaSyAkR64LHntE29CluL5A6NOjZp-pwqRZ3oo`)
+        fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&type=video&key=`)
         .then((res)=>res.json())
         .then((data)=>{
-            console.log(data)
             setVideoData(data.items);
         })
     }

@@ -4,22 +4,25 @@ import {AntDesign, EvilIcons, FontAwesome5, MaterialIcons} from '@expo/vector-ic
 import Header from '../Component/Header';
 import { useRoute } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
-const url = 'https://65598c87e93ca47020aa4601.mockapi.io/VideoDaXem'
+const url = 'https://65598c87e93ca47020aa4601.mockapi.io/Users'
 
-export default function History() {
+export default function History({navigation}) {
 
-  const [historyData,setHistoryData] = useState([])
+  const data = useSelector(state=>{
+    return state.videoDaXem
+  })
 
-  const fetchData = () =>{
-    fetch(url)
-    .then((res)=>res.json())
-    .then((data)=>{
-      setHistoryData(data)
-    })
-  }
+//   const fetchData = () =>{
+//     fetch(url)
+//     .then((res)=>res.json())
+//     .then((data)=>{
+//       setHistoryData(data)
+//     })
+//   }
 
-useEffect(fetchData,[])
+// useEffect(fetchData,[])
 
   return (
     <View style={styles.container}>
@@ -40,11 +43,11 @@ useEffect(fetchData,[])
         </View>
 
           <FlatList
-          data={historyData}
+          data={data}
           renderItem={({item})=>{
             return(
               <TouchableOpacity onPress = {()=> navigation.navigate('VideoPlayer',{
-                videoId: item.id, 
+                videoId: item.idVideo, 
                 title: item.titleVideo,
                 channelName: item.channelName
             })}>

@@ -1,17 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image ,FlatList, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View, Image ,FlatList, TouchableOpacity, Pressable} from 'react-native';
 import {AntDesign, EvilIcons, FontAwesome5} from '@expo/vector-icons'
 import Header from '../Component/Header';
-import { FapTV } from './FapTV';
+import { FapTVsub } from './FapTV';
 
 const Arr=[
-  {name:'Fap TV',img:require('../image/FapTVLogo.png'),},
+ {name:'Fap TV',img:require('../image/FapTVLogo.png'),},
   {name:'Chris',img:require('../image/ChrisLogo.png'),},
   {name:'KhoaPug',img:require('../image/KhoaPugLogo.png'),},
   {name:'MrBeast',img:require('../image/MrBeastLogo.png'),},
 ]
 
-export default function ChannelSub() {
+export default function ChannelSub({navigation}) {
   return (
     <View style={styles.container}>
         <View style ={{
@@ -28,7 +28,8 @@ export default function ChannelSub() {
       
       data={Arr}
       renderItem={({item})=>(
-        <TouchableOpacity style={
+        <TouchableOpacity onPress={()=>{navigation.navigate('FapTVsub')}} 
+        style={
             {
                 marginHorizontal:10,
                 flexDirection:'row',
@@ -52,11 +53,31 @@ export default function ChannelSub() {
 
       </View>
       </View>
+      <View>
+        <Pressable onPress={() => {
+          navigation.navigate('FapTV')
+        }} >
+
+        </Pressable>
+      </View>
+     
 
     </View>
   );
 }
-
+/*
+ <View>
+        <Pressable onPress={()=>{navigation.navigate('FapTV')}}>
+          <TouchableOpacity>
+          <View>
+          <Image style={{width:60, height:60,marginHorizontal:15,}} source={require('../image/FapTVLogo.png')} />
+          <Text>Fap TV</Text>
+          </View>
+          </TouchableOpacity>
+          
+        </Pressable>
+      </View>
+*/
 const styles = StyleSheet.create({
     container:{
         flex: 1,

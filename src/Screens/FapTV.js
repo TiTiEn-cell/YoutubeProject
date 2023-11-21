@@ -9,6 +9,7 @@ export default function FapTV() {
         <View>
           <Header/>
           <View>
+            <Image style={{width:400,height:600,}} source={require('../image/faptv.png')}/>
           <Image source={require('../image/FapTVLogo.png')} style={{}}></Image>
           <Text style={{fontSize:30, }}><b>FAPTV</b></Text>
           </View>

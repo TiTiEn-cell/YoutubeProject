@@ -5,7 +5,9 @@ import ReactPlayer from 'react-player';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Comment from '../Component/Comment';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+
+const url = 'https://65598c87e93ca47020aa4601.mockapi.io/Users'
 
 export default function VideoPlay({route}) {
   const {videoId, title, channelName, channelId, channelBanner} = route.params
@@ -18,6 +20,7 @@ export default function VideoPlay({route}) {
   const Data = useSelector(state=>{
     return state.id
   })
+  const dispatch = useDispatch();
 
   const updateKenhDaDangKy = async ()=>{
     const res = await fetch(`https://65598c87e93ca47020aa4601.mockapi.io/Users/${Data}`,{
@@ -43,11 +46,19 @@ export default function VideoPlay({route}) {
         },
         body:JSON.stringify(data)
     })
-    navigation.navigate('VideoPlayer',{
-        videoId: props.videoId, 
-        title: props.title,
-        channelName: props.channel
-    })
+  } 
+
+  const updateDataAndFetch = async () => {
+    await updateKenhDaDangKy(); // Cập nhật dữ liệu trong Redux
+    const response = await fetch(url); // Yêu cầu mới để lấy dữ liệu từ API
+    if (response.ok) {
+      const data = await response.json();
+      for (var i = 0; i < data.length; i++) {
+        if (Data == data[i].id) {
+          dispatch({ type: 'addData', payload: data[i] });
+        }
+      }
+    }
   } 
 
   const fetchData = ()=>{
@@ -204,7 +215,9 @@ export default function VideoPlay({route}) {
           alignItems: 'center',
           backgroundColor: 'black'
         }}
-        onPress={()=>updateKenhDaDangKy()}
+        onPress={()=>{updateKenhDaDangKy(),
+          updateDataAndFetch()
+        }}
         >
         <Text style = {{
           color: 'white'

@@ -52,7 +52,8 @@ export default function History({navigation}) {
               <TouchableOpacity onPress = {()=> navigation.navigate('VideoPlayer',{
                 videoId: item.idVideo, 
                 title: item.titleVideo,
-                channelName: item.channelName
+                channelName: item.channelName,
+                channelBanner: item.channelBanner
             })}>
           <View style = {{
               marginBottom: 20,

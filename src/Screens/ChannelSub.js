@@ -16,7 +16,7 @@ export default function ChannelSub() {
           <Header/>
           </View>
         <View>
-          <Text style={{fontSize:20, marginHorizontal:10,}}><b>Tất cả các kênh đăng ký</b></Text>
+          <Text style={{fontSize:20, marginTop: 20, marginBottom: 10,marginLeft: 20,}}><b>Tất cả các kênh đăng ký</b></Text>
         </View>
 
       <FlatList
@@ -28,6 +28,7 @@ export default function ChannelSub() {
                 marginHorizontal:10,
                 flexDirection:'row',
                 marginBottom: 20,
+                marginLeft: 20,
         }
         }>
             <Image source={item.avartaChannel} 

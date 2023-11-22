@@ -4,11 +4,13 @@ import {AntDesign, EvilIcons, FontAwesome5} from '@expo/vector-icons';
 import Header from '../Component/Header'
 import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
 
 export default function HomeScreen() {    
     const navigation = useNavigation();
     const [videoData, setVideoData] = useState([]);
+
     const fetchDataVideo = () =>{
         fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&type=video&key=`)
         .then((res)=>res.json())

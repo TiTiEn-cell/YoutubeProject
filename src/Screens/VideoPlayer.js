@@ -9,17 +9,23 @@ import { useSelector, useDispatch } from 'react-redux';
 
 const url = 'https://65598c87e93ca47020aa4601.mockapi.io/Users'
 
-export default function VideoPlay({route}) {
+export default function VideoPlay({navigation,route}) {
   const {videoId, title, channelName, channelId, channelBanner} = route.params
 
   const [videoData, setVideoData] = useState([]);
   const [comment, setComment] = useState([])
   const [like, setLike] = useState(false);
   const [disLike, setDislike] = useState(false);
+  const [sub, setSub] = useState(false)
   
   const Data = useSelector(state=>{
     return state.id
   })
+  const loggedIn = useSelector(state=>{
+    return state.loggedIn
+  })
+  console.log(loggedIn)
+
   const dispatch = useDispatch();
 
   const updateKenhDaDangKy = async ()=>{
@@ -56,10 +62,13 @@ export default function VideoPlay({route}) {
       for (var i = 0; i < data.length; i++) {
         if (Data == data[i].id) {
           dispatch({ type: 'addData', payload: data[i] });
+          dispatch({type: 'log_in'})
         }
       }
     }
   } 
+
+
 
   const fetchData = ()=>{
     fetch(`https://youtube.googleapis.com/youtube/v3/videos?part=snippet&part=statistics&part=topicDetails&id=${videoId}&maxResults=10&key=AIzaSyAkR64LHntE29CluL5A6NOjZp-pwqRZ3oo`)
@@ -114,7 +123,10 @@ export default function VideoPlay({route}) {
       setLike(false);
     }
   };
-
+  const handleSub = ()=>{
+    setSub(!sub)
+    
+  };
   const handleShare = () =>{
     navigator.clipboard.writeText(`https://www.youtube.com/watch?v=${videoId}`);
     alert('Copied');
@@ -205,8 +217,24 @@ export default function VideoPlay({route}) {
           {channelName}
         </Text>
         </View>
-        
-        <TouchableOpacity style = {{
+
+        {loggedIn ? (sub?(<TouchableOpacity style = {{
+          borderWidth: 1,
+          borderRadius: 20,
+          width: 80,
+          height: 35,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: 'grey'
+        }}
+        onPress={()=>handleSub()}
+        >
+        <Text style = {{
+          color: 'white'
+        }}>
+          Hủy đăng ký
+        </Text>
+        </TouchableOpacity>):(<TouchableOpacity style = {{
           borderWidth: 1,
           borderRadius: 20,
           width: 75,
@@ -215,7 +243,8 @@ export default function VideoPlay({route}) {
           alignItems: 'center',
           backgroundColor: 'black'
         }}
-        onPress={()=>{updateKenhDaDangKy(),
+        onPress={()=>{handleSub(),
+          updateKenhDaDangKy(),
           updateDataAndFetch()
         }}
         >
@@ -224,7 +253,25 @@ export default function VideoPlay({route}) {
         }}>
           Đăng ký
         </Text>
-        </TouchableOpacity>
+        </TouchableOpacity>)): (<TouchableOpacity style = {{
+          borderWidth: 1,
+          borderRadius: 20,
+          width: 75,
+          height: 35,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: 'black'
+        }}
+        onPress={()=>navigation.navigate('DangNhap')}
+        >
+        <Text style = {{
+          color: 'white'
+        }}>
+          Đăng ký
+        </Text>
+        </TouchableOpacity>)}
+        
+        
 
         
       </View>

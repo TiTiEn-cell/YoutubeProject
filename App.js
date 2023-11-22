@@ -22,6 +22,8 @@ const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
 const store = createStore(reducer)
 
+console.log(store)
+
 const mainHome =()=>{
   return(
 <Tabs.Navigator

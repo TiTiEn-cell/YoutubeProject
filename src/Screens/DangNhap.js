@@ -20,8 +20,8 @@ const DangNhap = ({navigation}) => {
             for(var i = 0; i<data.length; i++){
                 if(email == data[i].email && pass == data[i].password){
                     dispatch({type:'addData', payload: data[i]})
-                        
-                        navigation.navigate('MainHome')
+                    dispatch({type: 'log_in'})
+                    navigation.goBack()
 
                 }else{
                     setError('Email hoặc mật khẩu không chính xác!!')

@@ -1,9 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Image, Dimensions,FlatList,TouchableOpacity } from 'react-native';
 import {AntDesign, EvilIcons, FontAwesome5} from '@expo/vector-icons'
-import { FlatList, TouchableOpacity } from 'react-native-web';
 import { useNavigation } from '@react-navigation/native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import VideoPlayer from '../Screens/VideoPlayer'
 import History from '../Screens/History';
 import { useSelector } from 'react-redux';
@@ -12,6 +11,7 @@ const url = 'https://65598c87e93ca47020aa4601.mockapi.io/VideoDaXem'
 
 export default function Card(props) {
       const navigation = useNavigation();
+      const [channel, setChannel] = useState([])
       const Data = useSelector(state=>{
         return state.id
       })
@@ -31,7 +31,8 @@ export default function Card(props) {
             idVideo: props.videoId,
             thumbnailURL: props.thumbnails,
             titleVideo: props.title,
-            channelName: props.channel
+            channelName: props.channel,
+            channelBanner: channel[0].snippet.thumbnails.default.url
         });
         const updateRes = await fetch(`https://65598c87e93ca47020aa4601.mockapi.io/Users/${Data}`,{
             method: 'PUT',
@@ -41,24 +42,46 @@ export default function Card(props) {
             },
             body:JSON.stringify(data)
         })
-        navigation.navigate('VideoPlayer',{
-            videoId: props.videoId, 
-            title: props.title,
-            channelName: props.channel
-        })
       }
+
+      const fetchData = ()=>{
+        fetch(`https://youtube.googleapis.com/youtube/v3/channels?part=snippet&part=id&id=${props.channelId}&key=AIzaSyAkR64LHntE29CluL5A6NOjZp-pwqRZ3oo`)
+        .then((res)=>res.json())
+        .then((data)=>{     
+            setChannel(data.items)
+            console.log(data.items)
+        })
+    }
+
+    useEffect(fetchData,[])
 
       
   return (
     <TouchableOpacity 
-    onPress = {()=>updateVideoDaXem()}
+    onPress = {()=>{updateVideoDaXem(), navigation.navigate('VideoPlayer',{
+        videoId: props.videoId, 
+        title: props.title,
+        channelName: props.channel,
+        channelId: props.channelId,
+        channelBanner: channel[0].snippet.thumbnails.default.url
+    }) }}
     >
 <View style = {styles.body}
     
     >
         <Image source = {props.thumbnails} style = {styles.video}/>
         <View style = {styles.infoVideo}>
-            <Image source= {props.channelBanner} style = {styles.imageUser}/>
+            <FlatList
+            data={channel}
+            renderItem={({item})=>{
+                return(
+                    <View>
+                        <Image source= {item.snippet.thumbnails.default.url} style = {styles.imageUser}/>
+                    </View>
+                )
+            }}
+            />
+            
             <View>
                 <Text 
                 style = {styles.textTieuDeVideo}

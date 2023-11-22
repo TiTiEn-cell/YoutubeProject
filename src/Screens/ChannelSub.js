@@ -3,30 +3,25 @@ import { StyleSheet, Text, View, Image ,FlatList, TouchableOpacity} from 'react-
 import {AntDesign, EvilIcons, FontAwesome5} from '@expo/vector-icons'
 import Header from '../Component/Header';
 import { FapTV } from './FapTV';
+import { useSelector } from 'react-redux';
 
-const Arr=[
-  {name:'Fap TV',img:require('../image/FapTVLogo.png'),},
-  {name:'Chris',img:require('../image/ChrisLogo.png'),},
-  {name:'KhoaPug',img:require('../image/KhoaPugLogo.png'),},
-  {name:'MrBeast',img:require('../image/MrBeastLogo.png'),},
-]
 
 export default function ChannelSub() {
+
+  const Data = useSelector(state=>{return state.kenhDangKy})
+
   return (
     <View style={styles.container}>
-        <View style ={{
-            flexDirection: '',
-            
-        }}>
           <View>
           <Header/>
           </View>
         <View>
           <Text style={{fontSize:20, marginHorizontal:10,}}><b>Tất cả các kênh đăng ký</b></Text>
         </View>
+
       <FlatList
       
-      data={Arr}
+      data={Data}
       renderItem={({item})=>(
         <TouchableOpacity style={
             {
@@ -35,14 +30,14 @@ export default function ChannelSub() {
                 marginBottom: 20,
         }
         }>
-            <Image source={item.img} 
+            <Image source={item.avartaChannel} 
             style={{
                 width:60,
                 height:60,
-
+                borderRadius: 50,
             }}></Image>
             <View style={{justifyContent:'center'}}>
-            <Text style={{fontSize:20,flexDirection:'row-reverse',marginHorizontal:15,}}>{item.name}</Text>
+            <Text style={{fontSize:20,flexDirection:'row-reverse',marginHorizontal:15,}}>{item.nameChannel}</Text>
             </View>
             
         </TouchableOpacity>
@@ -51,7 +46,7 @@ export default function ChannelSub() {
        <View style={{justifyContent:"center"}}>
 
       </View>
-      </View>
+
 
     </View>
   );

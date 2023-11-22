@@ -17,7 +17,6 @@ export default function Search({navigation}) {
         .then((data)=>{
             setLoading(false)       
             setCardData(data.items)
-            console.log(data.items)
         })
     }
 

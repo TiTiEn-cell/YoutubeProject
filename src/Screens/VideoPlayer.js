@@ -1,20 +1,54 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, Dimensions, FlatList} from 'react-native';
+import { StyleSheet, Text, View, Image, Dimensions, FlatList, TouchableOpacity} from 'react-native';
 import {AntDesign, MaterialCommunityIcons} from '@expo/vector-icons'
 import ReactPlayer from 'react-player';
-import {  TouchableOpacity } from 'react-native-web';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Comment from '../Component/Comment';
-
+import { useSelector } from 'react-redux';
 
 export default function VideoPlay({route}) {
-  const {videoId, title, channelName} = route.params
+  const {videoId, title, channelName, channelId, channelBanner} = route.params
 
   const [videoData, setVideoData] = useState([]);
   const [comment, setComment] = useState([])
   const [like, setLike] = useState(false);
   const [disLike, setDislike] = useState(false);
+  
+  const Data = useSelector(state=>{
+    return state.id
+  })
+
+  const updateKenhDaDangKy = async ()=>{
+    const res = await fetch(`https://65598c87e93ca47020aa4601.mockapi.io/Users/${Data}`,{
+        method: 'GET',
+        headers: {
+        'Content-Type': 'application/json',
+    },
+    });
+    const data = await res.json();
+    if(!data.kenhDangKy){
+        data.kenhDangKy = [];
+    }
+    data.kenhDangKy.push({
+        idChannel: channelId,
+        avartaChannel: channelBanner,
+        nameChannel: channelName
+    });
+    const updateRes = await fetch(`https://65598c87e93ca47020aa4601.mockapi.io/Users/${Data}`,{
+        method: 'PUT',
+        headers:{
+            'Accept': "application/json",
+            "Content-type": "application/json; charset=UTF-8",
+        },
+        body:JSON.stringify(data)
+    })
+    navigation.navigate('VideoPlayer',{
+        videoId: props.videoId, 
+        title: props.title,
+        channelName: props.channel
+    })
+  } 
 
   const fetchData = ()=>{
     fetch(`https://youtube.googleapis.com/youtube/v3/videos?part=snippet&part=statistics&part=topicDetails&id=${videoId}&maxResults=10&key=AIzaSyAkR64LHntE29CluL5A6NOjZp-pwqRZ3oo`)
@@ -140,10 +174,11 @@ export default function VideoPlay({route}) {
           alignItems: 'center',
         }}>
         <Image
-        source={require('../image/UserIcon.png')}
+        source={channelBanner}
         style = {{
           width: 30,
           height: 30,
+          borderRadius: 50,
         }}
         />
 
@@ -168,7 +203,9 @@ export default function VideoPlay({route}) {
           justifyContent: 'center',
           alignItems: 'center',
           backgroundColor: 'black'
-        }}>
+        }}
+        onPress={()=>updateKenhDaDangKy()}
+        >
         <Text style = {{
           color: 'white'
         }}>

@@ -59,7 +59,7 @@ export default function History({navigation}) {
               >
                   <Image source = {item.thumbnailURL} style = {styles.video}/>
                   <View style = {styles.infoVideo}>
-                      <Image  style = {styles.imageUser}/>
+                      <Image source={item.channelBanner} style = {styles.imageUser}/>
                       <View>
                           <Text 
                           style = {styles.textTieuDeVideo}

@@ -1,6 +1,8 @@
 import { StyleSheet, Text, View, ImageBackground,TextInput,TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 
 const url = 'https://65598c87e93ca47020aa4601.mockapi.io/Users'
 
@@ -24,6 +26,30 @@ const DangNhap = ({navigation}) => {
             }
         })
     }
+
+    // const save = async ()=>{
+    //     try {
+    //       await AsyncStorage.setItem("user", email)
+    //     } catch (err) {
+    //       alert(err)
+    //     }
+    //   }
+
+    //   const load = async ()=>{
+    //     try {
+    //       let email = await AsyncStorage.getItem("user")
+    
+    //       if(email !== null){
+    //         setEmail(email)
+    //       }
+    //     } catch (err) {
+    //       alert(err)
+    //     }
+    //   }
+
+    //   useEffect(()=>{
+    //     load();
+    //   },[]);
 
   return (
     <View style = {{
@@ -100,7 +126,7 @@ const DangNhap = ({navigation}) => {
                 alignItems: 'center',
                 marginTop: 50,
             }}
-            onPress={()=>handleLogin()}
+            onPress={()=>{handleLogin()}}
             >
                 <Text style = {{
                     fontSize: 15,

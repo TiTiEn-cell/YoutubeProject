@@ -10,6 +10,7 @@ const DangNhap = ({navigation}) => {
 
     const [email, setEmail] = useState('')
     const [pass, setPass] = useState('')
+    const [error, setError] = useState('')
     const dispatch = useDispatch()
 
     const handleLogin = () =>{
@@ -19,37 +20,15 @@ const DangNhap = ({navigation}) => {
             for(var i = 0; i<data.length; i++){
                 if(email == data[i].email && pass == data[i].password){
                     dispatch({type:'addData', payload: data[i]})
-                    navigation.navigate('MainHome')
+                        
+                        navigation.navigate('MainHome')
+
                 }else{
-                    console.log('Dang nhap that bai!!!')
+                    setError('Email hoặc mật khẩu không chính xác!!')
                 }
             }
         })
     }
-
-    // const save = async ()=>{
-    //     try {
-    //       await AsyncStorage.setItem("user", email)
-    //     } catch (err) {
-    //       alert(err)
-    //     }
-    //   }
-
-    //   const load = async ()=>{
-    //     try {
-    //       let email = await AsyncStorage.getItem("user")
-    
-    //       if(email !== null){
-    //         setEmail(email)
-    //       }
-    //     } catch (err) {
-    //       alert(err)
-    //     }
-    //   }
-
-    //   useEffect(()=>{
-    //     load();
-    //   },[]);
 
   return (
     <View style = {{
@@ -118,13 +97,23 @@ const DangNhap = ({navigation}) => {
             }}
             onChangeText={(text)=>setPass(text)}
             />
+            <View style = {{
+                justifyContent: 'center',
+                alignItems: 'center'
+            }}>
+            {error !== '' && <Text style = {{
+              color: 'red',
+              marginTop: 10,
+            }}>{error}</Text>}
+            </View>
+            
             <TouchableOpacity style = {{
                 width: 90,
                 height: 35,
                 backgroundColor: 'white',
                 justifyContent: 'center',
                 alignItems: 'center',
-                marginTop: 50,
+                marginTop: 20,
             }}
             onPress={()=>{handleLogin()}}
             >

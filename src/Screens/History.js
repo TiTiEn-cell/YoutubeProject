@@ -4,12 +4,14 @@ import {AntDesign, EvilIcons, FontAwesome5, MaterialIcons} from '@expo/vector-ic
 import Header from '../Component/Header';
 import { useRoute } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+
 
 const url = 'https://65598c87e93ca47020aa4601.mockapi.io/Users'
 
 export default function History({navigation}) {
 
+  const dispatch = useDispatch()
   const data = useSelector(state=>{
     return state.videoDaXem
   })
@@ -23,6 +25,7 @@ export default function History({navigation}) {
 //   }
 
 // useEffect(fetchData,[])
+
 
   return (
     <View style={styles.container}>

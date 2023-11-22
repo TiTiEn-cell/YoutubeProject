@@ -5,9 +5,9 @@ import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import VideoPlayer from '../Screens/VideoPlayer'
 import History from '../Screens/History';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
-const url = 'https://65598c87e93ca47020aa4601.mockapi.io/VideoDaXem'
+const url = 'https://65598c87e93ca47020aa4601.mockapi.io/Users'
 
 export default function Card(props) {
       const navigation = useNavigation();
@@ -15,6 +15,8 @@ export default function Card(props) {
       const Data = useSelector(state=>{
         return state.id
       })
+      console.log(Data)
+      const dispatch = useDispatch();
 
       const updateVideoDaXem = async ()=>{
         const res = await fetch(`https://65598c87e93ca47020aa4601.mockapi.io/Users/${Data}`,{
@@ -42,29 +44,48 @@ export default function Card(props) {
             },
             body:JSON.stringify(data)
         })
+        
+        
       }
+
+      const updateDataAndFetch = async () => {
+          await updateVideoDaXem(); // Cập nhật dữ liệu trong Redux
+          const response = await fetch(url); // Yêu cầu mới để lấy dữ liệu từ API
+          if (response.ok) {
+            const data = await response.json();
+            for (var i = 0; i < data.length; i++) {
+              if (Data == data[i].id) {
+                dispatch({ type: 'addData', payload: data[i] });
+              }
+            }
+          }
+        }
 
       const fetchData = ()=>{
         fetch(`https://youtube.googleapis.com/youtube/v3/channels?part=snippet&part=id&id=${props.channelId}&key=AIzaSyAkR64LHntE29CluL5A6NOjZp-pwqRZ3oo`)
         .then((res)=>res.json())
         .then((data)=>{     
             setChannel(data.items)
-            console.log(data.items)
         })
     }
 
     useEffect(fetchData,[])
+    
 
       
   return (
     <TouchableOpacity 
-    onPress = {()=>{updateVideoDaXem(), navigation.navigate('VideoPlayer',{
-        videoId: props.videoId, 
-        title: props.title,
-        channelName: props.channel,
-        channelId: props.channelId,
-        channelBanner: channel[0].snippet.thumbnails.default.url
-    }) }}
+    onPress = {()=>{updateVideoDaXem(), 
+        updateDataAndFetch(),
+        navigation.navigate('VideoPlayer',{
+            videoId: props.videoId, 
+            title: props.title,
+            channelName: props.channel,
+            channelId: props.channelId,
+            channelBanner: channel[0].snippet.thumbnails.default.url
+        })
+        
+}}
     >
 <View style = {styles.body}
     

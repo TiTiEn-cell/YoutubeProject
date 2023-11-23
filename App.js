@@ -9,10 +9,20 @@ import Search from './src/Screens/Search'
 import ChannelSub from './src/Screens/ChannelSub'
 import History from './src/Screens/History';
 import VideoPlayer from './src/Screens/VideoPlayer';
+import Card from './src/Component/Card';
+import DangNhap from './src/Screens/DangNhap';
+import DangKy from './src/Screens/DangKy';
+import { Provider } from 'react-redux';
+import { createStore } from '@reduxjs/toolkit';
+import { reducer } from './src/Component/Reducer';
+
 
 //https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=song&type=video&key=AIzaSyAkR64LHntE29CluL5A6NOjZp-pwqRZ3oo
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
+const store = createStore(reducer)
+
+console.log(store)
 
 const mainHome =()=>{
   return(
@@ -46,13 +56,19 @@ const mainHome =()=>{
 
 export default function App() {
   return (
-    <NavigationContainer>
+    <Provider store={store}>
+<NavigationContainer>
       <Stack.Navigator >
         <Stack.Screen name='MainHome' component={mainHome} options={{ headerShown: false }}/>
         <Stack.Screen name='Search' component={Search} options={{ headerShown: false }}/>
         <Stack.Screen name='VideoPlayer' component={VideoPlayer}/>
+        <Stack.Screen name='Card' component={Card}/>
+        <Stack.Screen name='DangNhap' component={DangNhap} options={{ headerShown: false }}/>
+        <Stack.Screen name='DangKy' component={DangKy} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
+    </Provider>
+    
   );
 }
 

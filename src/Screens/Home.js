@@ -4,16 +4,17 @@ import {AntDesign, EvilIcons, FontAwesome5} from '@expo/vector-icons';
 import Header from '../Component/Header'
 import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
 
 export default function HomeScreen() {    
     const navigation = useNavigation();
     const [videoData, setVideoData] = useState([]);
+
     const fetchDataVideo = () =>{
-        fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&type=video&key=AIzaSyAkR64LHntE29CluL5A6NOjZp-pwqRZ3oo`)
+        fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&type=video&key=`)
         .then((res)=>res.json())
         .then((data)=>{
-            console.log(data)
             setVideoData(data.items);
         })
     }
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
     },
     textTieuDeVideo:{
         fontSize: 18,
-        width: Dimensions.get('screen').width - 50
+        width: Dimensions.get('window').width - 50
     },
     textNameChannel:{
         fontSize: 13,

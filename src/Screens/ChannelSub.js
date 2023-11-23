@@ -2,31 +2,28 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image ,FlatList, TouchableOpacity, Pressable} from 'react-native';
 import {AntDesign, EvilIcons, FontAwesome5} from '@expo/vector-icons'
 import Header from '../Component/Header';
-import { FapTVsub } from './FapTV';
 
-const Arr=[
- {name:'Fap TV',img:require('../image/FapTVLogo.png'),},
-  {name:'Chris',img:require('../image/ChrisLogo.png'),},
-  {name:'KhoaPug',img:require('../image/KhoaPugLogo.png'),},
-  {name:'MrBeast',img:require('../image/MrBeastLogo.png'),},
-]
+import { FapTV } from './FapTV';
+import { useSelector } from 'react-redux';
 
-export default function ChannelSub({navigation}) {
+
+export default function ChannelSub() {
+
+  const Data = useSelector(state=>{return state.kenhDangKy})
+
+
   return (
     <View style={styles.container}>
-        <View style ={{
-            flexDirection: '',
-            
-        }}>
           <View>
           <Header/>
           </View>
         <View>
-          <Text style={{fontSize:20, marginHorizontal:10,}}><b>Tất cả các kênh đăng ký</b></Text>
+          <Text style={{fontSize:20, marginTop: 20, marginBottom: 10,marginLeft: 20,}}><b>Tất cả các kênh đăng ký</b></Text>
         </View>
+
       <FlatList
       
-      data={Arr}
+      data={Data}
       renderItem={({item})=>(
         <TouchableOpacity onPress={()=>{navigation.navigate('FapTVsub')}} 
         style={
@@ -34,16 +31,17 @@ export default function ChannelSub({navigation}) {
                 marginHorizontal:10,
                 flexDirection:'row',
                 marginBottom: 20,
+                marginLeft: 20,
         }
         }>
-            <Image source={item.img} 
+            <Image source={item.avartaChannel} 
             style={{
                 width:60,
                 height:60,
-
+                borderRadius: 50,
             }}></Image>
             <View style={{justifyContent:'center'}}>
-            <Text style={{fontSize:20,flexDirection:'row-reverse',marginHorizontal:15,}}>{item.name}</Text>
+            <Text style={{fontSize:20,flexDirection:'row-reverse',marginHorizontal:15,}}>{item.nameChannel}</Text>
             </View>
             
         </TouchableOpacity>
@@ -52,15 +50,8 @@ export default function ChannelSub({navigation}) {
        <View style={{justifyContent:"center"}}>
 
       </View>
-      </View>
-      <View>
-        <Pressable onPress={() => {
-          navigation.navigate('FapTV')
-        }} >
 
-        </Pressable>
-      </View>
-     
+
 
     </View>
   );

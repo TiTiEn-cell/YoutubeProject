@@ -1,28 +1,108 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Image, Dimensions,FlatList,TouchableOpacity } from 'react-native';
 import {AntDesign, EvilIcons, FontAwesome5} from '@expo/vector-icons'
-import { FlatList, TouchableOpacity } from 'react-native-web';
 import { useNavigation } from '@react-navigation/native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import VideoPlayer from '../Screens/VideoPlayer'
+import History from '../Screens/History';
+import { useSelector, useDispatch } from 'react-redux';
+
+const url = 'https://65598c87e93ca47020aa4601.mockapi.io/Users'
 
 export default function Card(props) {
       const navigation = useNavigation();
+      const [channel, setChannel] = useState([])
+      const Data = useSelector(state=>{
+        return state.id
+      })
+      console.log(Data)
+      const dispatch = useDispatch();
+
+      const updateVideoDaXem = async ()=>{
+        const res = await fetch(`https://65598c87e93ca47020aa4601.mockapi.io/Users/${Data}`,{
+            method: 'GET',
+            headers: {
+            'Content-Type': 'application/json',
+        },
+        });
+        const data = await res.json();
+        if(!data.videoDaXem){
+            data.videoDaXem = [];
+        }
+        data.videoDaXem.push({
+            idVideo: props.videoId,
+            thumbnailURL: props.thumbnails,
+            titleVideo: props.title,
+            channelName: props.channel,
+            channelBanner: channel[0].snippet.thumbnails.default.url
+        });
+        const updateRes = await fetch(`https://65598c87e93ca47020aa4601.mockapi.io/Users/${Data}`,{
+            method: 'PUT',
+            headers:{
+                'Accept': "application/json",
+                "Content-type": "application/json; charset=UTF-8",
+            },
+            body:JSON.stringify(data)
+        })
+        
+        
+      }
+
+      const updateDataAndFetch = async () => {
+          await updateVideoDaXem(); // Cập nhật dữ liệu trong Redux
+          const response = await fetch(url); // Yêu cầu mới để lấy dữ liệu từ API
+          if (response.ok) {
+            const data = await response.json();
+            for (var i = 0; i < data.length; i++) {
+              if (Data == data[i].id) {
+                dispatch({ type: 'addData', payload: data[i] });
+              }
+            }
+          }
+        }
+
+      const fetchData = ()=>{
+        fetch(`https://youtube.googleapis.com/youtube/v3/channels?part=snippet&part=id&id=${props.channelId}&key=AIzaSyAkR64LHntE29CluL5A6NOjZp-pwqRZ3oo`)
+        .then((res)=>res.json())
+        .then((data)=>{     
+            setChannel(data.items)
+        })
+    }
+
+    useEffect(fetchData,[])
+    
+
       
   return (
     <TouchableOpacity 
-    onPress = {()=> navigation.navigate('VideoPlayer',{
-        videoId: props.videoId, 
-        title: props.title,
-        channelName: props.channel
-    })}
+    onPress = {()=>{updateVideoDaXem(), 
+        updateDataAndFetch(),
+        navigation.navigate('VideoPlayer',{
+            videoId: props.videoId, 
+            title: props.title,
+            channelName: props.channel,
+            channelId: props.channelId,
+            channelBanner: channel[0].snippet.thumbnails.default.url
+        })
+        
+}}
     >
 <View style = {styles.body}
     
     >
         <Image source = {props.thumbnails} style = {styles.video}/>
         <View style = {styles.infoVideo}>
-            <Image source= {props.channelBanner} style = {styles.imageUser}/>
+            <FlatList
+            data={channel}
+            renderItem={({item})=>{
+                return(
+                    <View>
+                        <Image source= {item.snippet.thumbnails.default.url} style = {styles.imageUser}/>
+                    </View>
+                )
+            }}
+            />
+            
             <View>
                 <Text 
                 style = {styles.textTieuDeVideo}
@@ -69,7 +149,7 @@ const styles = StyleSheet.create({
     },
     textTieuDeVideo:{
         fontSize: 18,
-        width: Dimensions.get('screen').width - 50
+        width: Dimensions.get('window').width - 50
     },
     textNameChannel:{
         fontSize: 13,

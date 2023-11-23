@@ -1,21 +1,102 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, Dimensions, FlatList} from 'react-native';
+import { StyleSheet, Text, View, Image, Dimensions, FlatList, TouchableOpacity} from 'react-native';
 import {AntDesign, MaterialCommunityIcons} from '@expo/vector-icons'
 import ReactPlayer from 'react-player';
-import {  TouchableOpacity } from 'react-native-web';
 import { useEffect, useState } from 'react';
+import axios from 'axios';
+import Comment from '../Component/Comment';
+import { useSelector, useDispatch } from 'react-redux';
 
+const url = 'https://65598c87e93ca47020aa4601.mockapi.io/Users'
 
-export default function VideoPlay({route}) {
-  const {videoId, title, channelName} = route.params
+export default function VideoPlay({navigation,route}) {
+  const {videoId, title, channelName, channelId, channelBanner} = route.params
+
   const [videoData, setVideoData] = useState([]);
+  const [comment, setComment] = useState([])
+  const [like, setLike] = useState(false);
+  const [disLike, setDislike] = useState(false);
+  const [sub, setSub] = useState(false)
+  
+  const Data = useSelector(state=>{
+    return state.id
+  })
+  const loggedIn = useSelector(state=>{
+    return state.loggedIn
+  })
+  console.log(loggedIn)
+
+  const dispatch = useDispatch();
+
+  const updateKenhDaDangKy = async ()=>{
+    const res = await fetch(`https://65598c87e93ca47020aa4601.mockapi.io/Users/${Data}`,{
+        method: 'GET',
+        headers: {
+        'Content-Type': 'application/json',
+    },
+    });
+    const data = await res.json();
+    if(!data.kenhDangKy){
+        data.kenhDangKy = [];
+    }
+    data.kenhDangKy.push({
+        idChannel: channelId,
+        avartaChannel: channelBanner,
+        nameChannel: channelName
+    });
+    const updateRes = await fetch(`https://65598c87e93ca47020aa4601.mockapi.io/Users/${Data}`,{
+        method: 'PUT',
+        headers:{
+            'Accept': "application/json",
+            "Content-type": "application/json; charset=UTF-8",
+        },
+        body:JSON.stringify(data)
+    })
+  } 
+
+  const updateDataAndFetch = async () => {
+    await updateKenhDaDangKy(); // Cập nhật dữ liệu trong Redux
+    const response = await fetch(url); // Yêu cầu mới để lấy dữ liệu từ API
+    if (response.ok) {
+      const data = await response.json();
+      for (var i = 0; i < data.length; i++) {
+        if (Data == data[i].id) {
+          dispatch({ type: 'addData', payload: data[i] });
+          dispatch({type: 'log_in'})
+        }
+      }
+    }
+  } 
+
+
+
   const fetchData = ()=>{
     fetch(`https://youtube.googleapis.com/youtube/v3/videos?part=snippet&part=statistics&part=topicDetails&id=${videoId}&maxResults=10&key=AIzaSyAkR64LHntE29CluL5A6NOjZp-pwqRZ3oo`)
     .then((res)=>res.json())
     .then((data)=>{     
         setVideoData(data.items);
+        console.log(data)
+    })
+    fetch(`https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet&part=id&maxResults=50&videoId=${videoId}&key=AIzaSyAkR64LHntE29CluL5A6NOjZp-pwqRZ3oo`)
+    .then((res)=>res.json())
+    .then((data)=>{
+      setComment(data.items)
+      console.log(data)
     })
 }
+
+// async function likeVideo(){
+//   try {
+//     const response = await axios.post(
+//       `https://youtube.googleapis.com/youtube/v3/videos/rate?id=${videoId}&rating=like&key=AIzaSyAkR64LHntE29CluL5A6NOjZp-pwqRZ3oo`
+//     );
+//     console.log('Like successful:', response.data);
+//   } catch (error) {
+//     console.error('Error liking video:', error);
+//   }
+  
+// }
+
   useEffect(fetchData,[]);
 
   const formatNumber = (number) => {
@@ -29,6 +110,27 @@ export default function VideoPlay({route}) {
       return `${number}`;
     }
   };
+
+  const handleLike = () =>{
+    setLike(!like)
+    if(disLike){
+      setDislike(false);
+    }
+  };
+  const handleDislike = () =>{
+    setDislike(!disLike)
+    if(like){
+      setLike(false);
+    }
+  };
+  const handleSub = ()=>{
+    setSub(!sub)
+    
+  };
+  const handleShare = () =>{
+    navigator.clipboard.writeText(`https://www.youtube.com/watch?v=${videoId}`);
+    alert('Copied');
+  }
 
   return (
     
@@ -47,10 +149,8 @@ export default function VideoPlay({route}) {
       <FlatList
       data={videoData}
       renderItem={({item})=>{
-        item
         return(
         <View>
-        
       <View style = {{
         marginTop: 18,
       }}>
@@ -97,23 +197,44 @@ export default function VideoPlay({route}) {
           alignItems: 'center',
         }}>
         <Image
-        source={require('../image/UserIcon.png')}
+        source={channelBanner}
         style = {{
           width: 30,
           height: 30,
+          borderRadius: 50,
         }}
         />
 
-        <Text style = {{
+        <Text 
+        ellipsizeMode='tail'
+        numberOfLines={1}
+        style = {{
           fontSize: 18,
           marginLeft: 10,
           fontWeight: 'bold',
+          width: Dimensions.get('screen').width/2
         }}>
           {channelName}
         </Text>
         </View>
-        
-        <TouchableOpacity style = {{
+
+        {loggedIn ? (sub?(<TouchableOpacity style = {{
+          borderWidth: 1,
+          borderRadius: 20,
+          width: 80,
+          height: 35,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: 'grey'
+        }}
+        onPress={()=>handleSub()}
+        >
+        <Text style = {{
+          color: 'white'
+        }}>
+          Hủy đăng ký
+        </Text>
+        </TouchableOpacity>):(<TouchableOpacity style = {{
           borderWidth: 1,
           borderRadius: 20,
           width: 75,
@@ -121,17 +242,39 @@ export default function VideoPlay({route}) {
           justifyContent: 'center',
           alignItems: 'center',
           backgroundColor: 'black'
-        }}>
+        }}
+        onPress={()=>{handleSub(),
+          updateKenhDaDangKy(),
+          updateDataAndFetch()
+        }}
+        >
         <Text style = {{
           color: 'white'
         }}>
           Đăng ký
         </Text>
-        </TouchableOpacity>
+        </TouchableOpacity>)): (<TouchableOpacity style = {{
+          borderWidth: 1,
+          borderRadius: 20,
+          width: 75,
+          height: 35,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: 'black'
+        }}
+        onPress={()=>navigation.navigate('DangNhap')}
+        >
+        <Text style = {{
+          color: 'white'
+        }}>
+          Đăng ký
+        </Text>
+        </TouchableOpacity>)}
+        
+        
 
         
       </View>
-
       <View style = {{
         marginTop: 18,
         flexDirection: 'row',
@@ -155,12 +298,14 @@ export default function VideoPlay({route}) {
           borderRightWidth: 1,
           justifyContent: 'center',
           alignItems: 'center',
-      }}>
-          <AntDesign name="like2" size={20} color="black" />
+      }}     
+      onPress={()=>handleLike()}
+      >
+          <AntDesign name= {like? "like1": "like2"} size={20} color="black"/>
           <Text style = {{
             marginLeft: 10,
           }}>
-            {formatNumber(item.statistics.likeCount)}
+            {like? formatNumber(item.statistics.likeCount):formatNumber(item.statistics.likeCount)}
           </Text>
           </TouchableOpacity>
 
@@ -172,8 +317,10 @@ export default function VideoPlay({route}) {
             borderBottomRightRadius: 20,
             width: 60,
             height: 30,
-          }}>
-          <AntDesign  name="dislike2" size={20} color="black" />
+          }}
+          onPress = {()=>handleDislike()}
+          >
+          <AntDesign  name={disLike?"dislike1": "dislike2"} size={20} color="black" />
           </TouchableOpacity>
         </View>
 
@@ -187,7 +334,9 @@ export default function VideoPlay({route}) {
           height: 30,
           borderRadius: 20,
           backgroundColor: '#D9D9D9',
-      }}>
+      }}
+      onPress={handleShare}
+      >
           <MaterialCommunityIcons name="share-outline" size={28} color="black" />          
           <Text>
             Chia sẻ
@@ -225,9 +374,22 @@ export default function VideoPlay({route}) {
         </View>
         
       </View>
+
+      
         </View>
           
         )
+      }}
+      />
+
+      <FlatList
+      data={comment}
+      renderItem={({item})=>{
+        return <Comment
+        Avarta = {item.snippet.topLevelComment.snippet.authorProfileImageUrl}
+        NameChannel = {item.snippet.topLevelComment.snippet.authorDisplayName}
+        Comment = {item.snippet.topLevelComment.snippet.textOriginal}
+        />
       }}
       />
       </View>
@@ -244,7 +406,7 @@ export default function VideoPlay({route}) {
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        
+        backgroundColor: 'white'
     },
   });
   

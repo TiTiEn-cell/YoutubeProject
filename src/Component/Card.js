@@ -13,9 +13,8 @@ export default function Card(props) {
       const navigation = useNavigation();
       const [channel, setChannel] = useState([])
       const Data = useSelector(state=>{
-        return state.id
+        return state.data.id
       })
-      console.log(Data)
       const dispatch = useDispatch();
 
       const updateVideoDaXem = async ()=>{
@@ -55,10 +54,10 @@ export default function Card(props) {
             const data = await response.json();
             for (var i = 0; i < data.length; i++) {
               if (Data == data[i].id) {
-                dispatch({ type: 'addData', payload: data[i] });
+                dispatch({type:'addData', payload: data[i]})
               }
             }
-          }
+          } 
         }
 
       const fetchData = ()=>{

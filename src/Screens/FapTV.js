@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import {AntDesign, EvilIcons, FontAwesome5} from '@expo/vector-icons'
 import Header from '../Component/Header';
 
@@ -7,10 +7,10 @@ export default function FapTV() {
   return (
     <View style={styles.container}>
       <View style={{marginTop:5}}>
-        <Image source={require('./assets/faptv.png')} style={{width:350, height:100,borderRadius:10,}}></Image>
+        <Image source={require('../image/faptv.png')} style={{width:350, height:100,borderRadius:10,}}></Image>
       </View>
       <View style={{flexDirection:''}}>
-      <Image source={require('./assets/FapTVLogo.png')} style={{width:60,height:60, borderRadius:10,right:75,marginTop:20}} />
+      <Image source={require('../image/FapTVLogo.png')} style={{width:60,height:60, borderRadius:10,right:75,marginTop:20}} />
         <Text style={{fontSize:30,marginHorizontal:10}}><b>FAPTV</b></Text>
         <Text style={{opacity:0.6,right:-10}}>@FapTV</Text>
         <Text style={{opacity:0.6,right:-10}}>13,8 Tr người đăng ký <Text style={{top:-5}}>. </Text>973 Video </Text>
@@ -27,7 +27,7 @@ export default function FapTV() {
         </View>
         <View style={{marginHorizontal:10,}}>
           <TouchableOpacity>
-          <Image source={require('./assets/dangky.png')} style={{width:350,height:30, borderRadius:5,marginTop:10}} />
+          <Image source={require('../image/dangky.png')} style={{width:350,height:30, borderRadius:5,marginTop:10}} />
           </TouchableOpacity>
         </View>
         <View style={{flexDirection:'row'}}>
@@ -52,7 +52,7 @@ export default function FapTV() {
         <View style={{marginHorizontal:5,marginTop:5,}}>
           <TouchableOpacity>
             <View style={{flexDirection:'row',}}>
-              <Image source={require('./assets/comnguoi295.png')} style={{width:180,height:100,borderRadius:5,}} />
+              <Image source={require('../image/comnguoi295.png')} style={{width:180,height:100,borderRadius:5,}} />
               <View style={{flexDirection:'column',marginHorizontal:5}}>
                 <Text style={{marginHorizontal:0,}} >FAPtv Cơm Nguội: Tập 295:Bộ Tộc Vô Tri</Text>
                 <Text style={{opacity:0.5,marginTop:2,}}>FAPTV<br></br>

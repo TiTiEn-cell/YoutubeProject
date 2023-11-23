@@ -6,7 +6,8 @@ const initialState = {
 export const reducer = (state = initialState,action)=>{
     switch (action.type) {
         case 'addData':
-            return action.payload
+            return { ...state, data: action.payload };   
+              
         case 'log_in':
             return {...state, loggedIn: true}
         case 'log_out':

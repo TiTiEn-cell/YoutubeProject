@@ -7,9 +7,9 @@ import { FapTV } from './FapTV';
 import { useSelector } from 'react-redux';
 
 
-export default function ChannelSub() {
+export default function ChannelSub({navigation}) {
 
-  const Data = useSelector(state=>{return state.kenhDangKy})
+  const Data = useSelector(state=>{return state.data.kenhDangKy})
 
 
   return (

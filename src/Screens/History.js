@@ -13,8 +13,10 @@ export default function History({navigation}) {
 
   const dispatch = useDispatch()
   const data = useSelector(state=>{
-    return state.videoDaXem
+    return state.data.videoDaXem
   })
+  console.log(data)
+
 
 //   const fetchData = () =>{
 //     fetch(url)

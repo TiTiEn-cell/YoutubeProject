@@ -19,12 +19,13 @@ export default function VideoPlay({navigation,route}) {
   const [sub, setSub] = useState(false)
   
   const Data = useSelector(state=>{
-    return state.id
+    return state.data.id
   })
   const loggedIn = useSelector(state=>{
     return state.loggedIn
   })
   console.log(loggedIn)
+  console.log('1')
 
   const dispatch = useDispatch();
 
@@ -62,7 +63,8 @@ export default function VideoPlay({navigation,route}) {
       for (var i = 0; i < data.length; i++) {
         if (Data == data[i].id) {
           dispatch({ type: 'addData', payload: data[i] });
-          dispatch({type: 'log_in'})
+          dispatch({type: 'log_in'});
+          console.log('run here')
         }
       }
     }
@@ -75,13 +77,11 @@ export default function VideoPlay({navigation,route}) {
     .then((res)=>res.json())
     .then((data)=>{     
         setVideoData(data.items);
-        console.log(data)
     })
     fetch(`https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet&part=id&maxResults=50&videoId=${videoId}&key=AIzaSyAkR64LHntE29CluL5A6NOjZp-pwqRZ3oo`)
     .then((res)=>res.json())
     .then((data)=>{
       setComment(data.items)
-      console.log(data)
     })
 }
 
@@ -135,6 +135,7 @@ export default function VideoPlay({navigation,route}) {
   return (
     
     <View style={styles.container}>
+      {console.log('2')}
       <View>
         <ReactPlayer
         url = {`https://www.youtube.com/watch?v=${videoId}`}

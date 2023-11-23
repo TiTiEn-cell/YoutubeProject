@@ -33,7 +33,8 @@ export default function Card(props) {
             thumbnailURL: props.thumbnails,
             titleVideo: props.title,
             channelName: props.channel,
-            channelBanner: channel[0].snippet.thumbnails.default.url
+            channelBanner: channel[0].snippet.thumbnails.default.url,
+            idChannel: props.channelId
         });
         const updateRes = await fetch(`https://65598c87e93ca47020aa4601.mockapi.io/Users/${Data}`,{
             method: 'PUT',

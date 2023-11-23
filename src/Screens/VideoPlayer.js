@@ -25,7 +25,6 @@ export default function VideoPlay({navigation,route}) {
     return state.loggedIn
   })
   console.log(loggedIn)
-  console.log('1')
 
   const dispatch = useDispatch();
 
@@ -55,16 +54,15 @@ export default function VideoPlay({navigation,route}) {
     })
   } 
 
+
   const updateDataAndFetch = async () => {
     await updateKenhDaDangKy(); // Cập nhật dữ liệu trong Redux
     const response = await fetch(url); // Yêu cầu mới để lấy dữ liệu từ API
     if (response.ok) {
-      const data = await response.json();
+      const data = await response.json(); 
       for (var i = 0; i < data.length; i++) {
         if (Data == data[i].id) {
           dispatch({ type: 'addData', payload: data[i] });
-          dispatch({type: 'log_in'});
-          console.log('run here')
         }
       }
     }
@@ -132,10 +130,40 @@ export default function VideoPlay({navigation,route}) {
     alert('Copied');
   }
 
+  const unSub = async()=>{
+    const userRes = await fetch(`https://65598c87e93ca47020aa4601.mockapi.io/Users/${Data}`);
+    const userData = await userRes.json();
+    if (userData.kenhDangKy && userData.kenhDangKy.length > 0) {
+      userData.kenhDangKy = userData.kenhDangKy.filter(channel => channel.idChannel !== channelId);
+      const updateRes = await fetch(`https://65598c87e93ca47020aa4601.mockapi.io/Users/${Data}`,{
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-type': 'application/json; charset=UTF-8',
+        },
+        body: JSON.stringify(userData),
+      }).then(res=>{
+        if(res.ok){
+          
+          for (var i = 0; i < userData.length; i++) {
+            if (Data == userData[i].id) {
+              dispatch({type:'addData', payload: userData[i]})
+            }
+            
+          }
+          updateKenhDaDangKy()
+        }
+      })
+      console.log('Video deleted successfully');
+    }else{
+      console.log('No videos found to delete');
+    }
+    }
+
+
   return (
     
     <View style={styles.container}>
-      {console.log('2')}
       <View>
         <ReactPlayer
         url = {`https://www.youtube.com/watch?v=${videoId}`}
@@ -228,7 +256,9 @@ export default function VideoPlay({navigation,route}) {
           alignItems: 'center',
           backgroundColor: 'grey'
         }}
-        onPress={()=>handleSub()}
+      onPress={()=>{handleSub(),
+      unSub()
+      }}
         >
         <Text style = {{
           color: 'white'

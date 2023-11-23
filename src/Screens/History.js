@@ -17,17 +17,7 @@ export default function History({navigation}) {
   })
   console.log(data)
 
-
-//   const fetchData = () =>{
-//     fetch(url)
-//     .then((res)=>res.json())
-//     .then((data)=>{
-//       setHistoryData(data)
-//     })
-//   }
-
-// useEffect(fetchData,[])
-
+ 
 
   return (
     <View style={styles.container}>
@@ -55,7 +45,8 @@ export default function History({navigation}) {
                 videoId: item.idVideo, 
                 title: item.titleVideo,
                 channelName: item.channelName,
-                channelBanner: item.channelBanner
+                channelBanner: item.channelBanner,
+                channelId : item.idChannel
             })}>
           <View style = {{
               marginBottom: 20,

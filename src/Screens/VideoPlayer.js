@@ -17,6 +17,8 @@ export default function VideoPlay({navigation,route}) {
   const [like, setLike] = useState(false);
   const [disLike, setDislike] = useState(false);
   const [sub, setSub] = useState(false)
+
+  
   
   const Data = useSelector(state=>{
     return state.data.id
@@ -24,7 +26,10 @@ export default function VideoPlay({navigation,route}) {
   const loggedIn = useSelector(state=>{
     return state.loggedIn
   })
-  console.log(loggedIn)
+  const dataSub = useSelector(state =>{
+    return state.data.kenhDangKy
+  })
+  
 
   const dispatch = useDispatch();
 
@@ -54,6 +59,36 @@ export default function VideoPlay({navigation,route}) {
     })
   } 
 
+  // const updateKenhDaHuyDangKy = async ()=>{
+  //   const response = await fetch(url);
+  //   const res = await fetch(`https://65598c87e93ca47020aa4601.mockapi.io/Users/${Data}`,{
+  //       method: 'GET',
+  //       headers: {
+  //       'Content-Type': 'application/json',
+  //   },
+  //   });
+  //   const data = await res.json();
+  //   if(data.kenhDangKy && data.kenhDangKy.length > 0){
+  //     data.kenhDangKy = data.kenhDangKy.filter(channel => channel.idChannel !== channelId);
+  //     const updateRes = await fetch(`https://65598c87e93ca47020aa4601.mockapi.io/Users/${Data}`,{
+  //       method: 'PUT',
+  //       headers: {
+  //         'Accept': 'application/json',
+  //         'Content-type': 'application/json; charset=UTF-8',
+  //       },
+  //       body: JSON.stringify(data),
+  //     })
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       for (var i = 0; i < data.length; i++) {
+  //         if (Data == data[i].id) {
+  //           dispatch({type:'addData', payload: data[i]})
+  //         }
+  //       }
+  //     }
+  //   }
+  // } 
+
 
   const updateDataAndFetch = async () => {
     await updateKenhDaDangKy(); // Cập nhật dữ liệu trong Redux
@@ -71,16 +106,17 @@ export default function VideoPlay({navigation,route}) {
 
 
   const fetchData = ()=>{
-    fetch(`https://youtube.googleapis.com/youtube/v3/videos?part=snippet&part=statistics&part=topicDetails&id=${videoId}&maxResults=10&key=AIzaSyAkR64LHntE29CluL5A6NOjZp-pwqRZ3oo`)
+    fetch(`https://youtube.googleapis.com/youtube/v3/videos?part=snippet&part=statistics&part=topicDetails&id=${videoId}&maxResults=10&key=AIzaSyDtlgOUocDV93ajAvmn_LXIYSpxQb7h2lw`)
     .then((res)=>res.json())
     .then((data)=>{     
         setVideoData(data.items);
     })
-    fetch(`https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet&part=id&maxResults=50&videoId=${videoId}&key=AIzaSyAkR64LHntE29CluL5A6NOjZp-pwqRZ3oo`)
+    fetch(`https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet&part=id&maxResults=50&videoId=${videoId}&key=AIzaSyDtlgOUocDV93ajAvmn_LXIYSpxQb7h2lw`)
     .then((res)=>res.json())
     .then((data)=>{
       setComment(data.items)
     })
+    hasSub();
 }
 
 // async function likeVideo(){
@@ -123,8 +159,15 @@ export default function VideoPlay({navigation,route}) {
   };
   const handleSub = ()=>{
     setSub(!sub)
-    
   };
+  const hasSub = ()=>{
+    for (let i = 0; i < dataSub.length; i++) {
+      if(channelId == dataSub[i].idChannel){
+        setSub(true)
+      }
+    }
+  }
+
   const handleShare = () =>{
     navigator.clipboard.writeText(`https://www.youtube.com/watch?v=${videoId}`);
     alert('Copied');
@@ -142,23 +185,40 @@ export default function VideoPlay({navigation,route}) {
           'Content-type': 'application/json; charset=UTF-8',
         },
         body: JSON.stringify(userData),
-      }).then(res=>{
-        if(res.ok){
-          
-          for (var i = 0; i < userData.length; i++) {
-            if (Data == userData[i].id) {
-              dispatch({type:'addData', payload: userData[i]})
-            }
-            
-          }
-          updateKenhDaDangKy()
-        }
       })
       console.log('Video deleted successfully');
     }else{
       console.log('No videos found to delete');
     }
     }
+
+    const loadUnSub = async () => {
+      await unSub(); // Cập nhật dữ liệu trong Redux
+      const response = await fetch(url); // Yêu cầu mới để lấy dữ liệu từ API
+      if (response.ok) {
+        const data = await response.json();
+        for (var i = 0; i < data.length; i++) {
+          if (Data == data[i].id) {
+            dispatch({type:'addData', payload: data[i]})
+          }
+        }
+      } 
+    }
+
+    // const load = async () => {
+    //   await updateVideoDaXem(); // Cập nhật dữ liệu trong Redux
+    //   const response = await fetch(url); // Yêu cầu mới để lấy dữ liệu từ API
+    //   if (response.ok) {
+    //     const data = await response.json();
+    //     for (var i = 0; i < data.length; i++) {
+    //       if (Data == data[i].id) {
+    //         dispatch({type:'addData', payload: data[i]})
+    //       }
+    //     }
+    //   } 
+    // }
+
+    
 
 
   return (
@@ -247,7 +307,7 @@ export default function VideoPlay({navigation,route}) {
         </Text>
         </View>
 
-        {loggedIn ? (sub?(<TouchableOpacity style = {{
+        {loggedIn? (sub?(<TouchableOpacity style = {{
           borderWidth: 1,
           borderRadius: 20,
           width: 80,
@@ -257,7 +317,8 @@ export default function VideoPlay({navigation,route}) {
           backgroundColor: 'grey'
         }}
       onPress={()=>{handleSub(),
-      unSub()
+      unSub(),
+      loadUnSub()
       }}
         >
         <Text style = {{
@@ -284,7 +345,7 @@ export default function VideoPlay({navigation,route}) {
         }}>
           Đăng ký
         </Text>
-        </TouchableOpacity>)): (<TouchableOpacity style = {{
+        </TouchableOpacity>)): ((<TouchableOpacity style = {{
           borderWidth: 1,
           borderRadius: 20,
           width: 75,
@@ -300,7 +361,7 @@ export default function VideoPlay({navigation,route}) {
         }}>
           Đăng ký
         </Text>
-        </TouchableOpacity>)}
+        </TouchableOpacity>))}
         
         
 

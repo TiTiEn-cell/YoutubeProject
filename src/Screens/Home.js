@@ -23,19 +23,18 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-        <View>
+        <View style = {
+            {zIndex:999}
+        }>
         <Header/>
         </View>
         
-        <View style = {styles.underHeader}>
-                <FontAwesome5 name = 'compass' size = {28} style = {styles.iconArrange}/>
-                <Text style = {styles.textArrangeAll}>Tất cả</Text>
-                <Text style = {styles.textArrangeMusic}>Âm nhạc</Text>
-                {<Text style = {styles.textArrangeGame}>Trò chơi</Text>}
-            </View> 
 
-
-            <FlatList
+<View style = {{
+    backgroundColor: 'red',
+    flex: 1
+}}>
+<FlatList
             data = {videoData}
             renderItem={({item})=>{
                 return(
@@ -75,6 +74,9 @@ export default function HomeScreen() {
                 )
             }}
             />
+</View>
+
+            
         
     </View>    
   );

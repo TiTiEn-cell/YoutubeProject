@@ -12,10 +12,18 @@ import {
 } from "react-native";
 import { AntDesign, EvilIcons, FontAwesome5 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { useSelector, useDispatch } from "react-redux";
 
 export default function Header() {
   const [selected, setselected] = useState(false);
   const navigation = useNavigation();
+  const disPatch = useDispatch()
+
+  const logOut = useSelector(state=>{
+    return state.loggedIn
+  })
+
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -82,6 +90,7 @@ export default function Header() {
                 borderRadius: 10,
                 backgroundColor: "#f0f0f0",
               }}
+              onPress={()=>disPatch({type: 'log_out'},console.log(logOut))}
             >
               <Text>Đăng xuất</Text>
             </Pressable>

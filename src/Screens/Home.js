@@ -3,11 +3,16 @@ import { StyleSheet, Text, View, Image, ScrollView, FlatList, Dimensions, Toucha
 import {AntDesign, EvilIcons, FontAwesome5} from '@expo/vector-icons';
 import Header from '../Component/Header'
 import { useEffect, useState } from 'react';
+
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 
 
-export default function HomeScreen() {    
+export default function HomeScreen() {   
+    const loggedIn = useSelector(state=>{
+        return state.loggedIn
+      }) 
+      
     const navigation = useNavigation();
     const [videoData, setVideoData] = useState([]);
 
@@ -17,6 +22,7 @@ export default function HomeScreen() {
         .then((data)=>{
             setVideoData(data.items);
         })
+        console.log(loggedIn)
     }
 
     useEffect(fetchDataVideo,[]);

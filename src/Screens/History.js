@@ -15,7 +15,6 @@ export default function History({navigation}) {
   const data = useSelector(state=>{
     return state.data.videoDaXem
   })
-  console.log(data)
 
  
 

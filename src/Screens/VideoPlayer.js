@@ -64,6 +64,19 @@ export default function VideoPlay({navigation,route}) {
     })
   } 
 
+  const updateDataAndFetch = async () => {
+    await updateKenhDaDangKy(); // Cập nhật dữ liệu trong Redux
+    const response = await fetch(url); // Yêu cầu mới để lấy dữ liệu từ API
+    if (response.ok) {
+      const data = await response.json(); 
+      for (var i = 0; i < data.length; i++) {
+        if (Data == data[i].id) {
+          dispatch({ type: 'addData', payload: data[i] });
+        }
+      }
+    }
+  }
+
   // const updateKenhDaHuyDangKy = async ()=>{
   //   const response = await fetch(url);
   //   const res = await fetch(`https://65598c87e93ca47020aa4601.mockapi.io/Users/${Data}`,{
@@ -95,51 +108,32 @@ export default function VideoPlay({navigation,route}) {
   // } 
 
 
-  const updateDataAndFetch = async () => {
-    await updateKenhDaDangKy(); // Cập nhật dữ liệu trong Redux
-    const response = await fetch(url); // Yêu cầu mới để lấy dữ liệu từ API
-    if (response.ok) {
-      const data = await response.json(); 
-      for (var i = 0; i < data.length; i++) {
-        if (Data == data[i].id) {
-          dispatch({ type: 'addData', payload: data[i] });
-        }
-      }
-    }
-  } 
+   
 
 
 
   const fetchData = ()=>{
-    fetch(`https://youtube.googleapis.com/youtube/v3/videos?part=snippet&part=statistics&part=topicDetails&id=${videoId}&maxResults=10&key=AIzaSyDtlgOUocDV93ajAvmn_LXIYSpxQb7h2lw`)
+    fetch(`https://youtube.googleapis.com/youtube/v3/videos?part=snippet&part=statistics&part=topicDetails&id=${videoId}&maxResults=10&key=AIzaSyCiPpCXyHTU2FtWNlhbDkdX_5rLTST94xg`)
     .then((res)=>res.json())
     .then((data)=>{     
         setVideoData(data.items);
     })
-    fetch(`https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet&part=id&maxResults=50&videoId=${videoId}&key=AIzaSyDtlgOUocDV93ajAvmn_LXIYSpxQb7h2lw`)
+    fetch(`https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet&part=id&maxResults=50&videoId=${videoId}&key=AIzaSyCiPpCXyHTU2FtWNlhbDkdX_5rLTST94xg`)
     .then((res)=>res.json())
     .then((data)=>{
       setComment(data.items)
     })
-    fetch(`https://youtube.googleapis.com/youtube/v3/channels?part=snippet&part=statistics&id=${channelId}&key=AIzaSyDtlgOUocDV93ajAvmn_LXIYSpxQb7h2lw`)
+    fetch(`https://youtube.googleapis.com/youtube/v3/channels?part=snippet&part=statistics&id=${channelId}&key=AIzaSyCiPpCXyHTU2FtWNlhbDkdX_5rLTST94xg`)
     .then((res)=>res.json())
     .then((data)=>{
       setSubCount(data.items)
     })
-    hasSub();
+    if(loggedIn === true){
+      hasSub();
+    }
+    
 }
 
-// async function likeVideo(){
-//   try {
-//     const response = await axios.post(
-//       `https://youtube.googleapis.com/youtube/v3/videos/rate?id=${videoId}&rating=like&key=AIzaSyAkR64LHntE29CluL5A6NOjZp-pwqRZ3oo`
-//     );
-//     console.log('Like successful:', response.data);
-//   } catch (error) {
-//     console.error('Error liking video:', error);
-//   }
-  
-// }
 
   useEffect(fetchData,[]);
 
@@ -394,6 +388,8 @@ export default function VideoPlay({navigation,route}) {
           Đăng ký
         </Text>
         </TouchableOpacity>))}  
+
+
       </TouchableOpacity>
       <View style = {{
         marginTop: 18,

@@ -34,7 +34,7 @@ export default function HomeScreen() {
     backgroundColor: 'red',
     flex: 1
 }}>
-<FlatList
+            <FlatList
             data = {videoData}
             renderItem={({item})=>{
                 return(

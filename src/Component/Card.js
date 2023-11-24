@@ -62,7 +62,7 @@ export default function Card(props) {
         }
 
       const fetchData = ()=>{
-        fetch(`https://youtube.googleapis.com/youtube/v3/channels?part=snippet&part=id&id=${props.channelId}&key=AIzaSyCiPpCXyHTU2FtWNlhbDkdX_5rLTST94xg`)
+        fetch(`https://youtube.googleapis.com/youtube/v3/channels?part=snippet&part=id&id=${props.channelId}&key=AIzaSyDtlgOUocDV93ajAvmn_LXIYSpxQb7h2lw`)
         .then((res)=>res.json())
         .then((data)=>{     
             setChannel(data.items)

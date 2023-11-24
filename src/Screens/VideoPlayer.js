@@ -11,7 +11,6 @@ import {
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 import ReactPlayer from "react-player";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import Comment from "../Component/Comment";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -123,27 +122,28 @@ export default function VideoPlay({ navigation, route }) {
 
   const fetchData = () => {
     fetch(
-      `https://youtube.googleapis.com/youtube/v3/videos?part=snippet&part=statistics&part=topicDetails&id=${videoId}&maxResults=10&key=AIzaSyCiPpCXyHTU2FtWNlhbDkdX_5rLTST94xg`
+      `https://youtube.googleapis.com/youtube/v3/videos?part=snippet&part=statistics&part=topicDetails&id=${videoId}&maxResults=10&key=AIzaSyDtlgOUocDV93ajAvmn_LXIYSpxQb7h2lw`
     )
       .then((res) => res.json())
       .then((data) => {
         setVideoData(data.items);
       });
     fetch(
-      `https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet&part=id&maxResults=50&videoId=${videoId}&key=AIzaSyCiPpCXyHTU2FtWNlhbDkdX_5rLTST94xg`
+      `https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet&part=id&maxResults=50&videoId=${videoId}&key=AIzaSyDtlgOUocDV93ajAvmn_LXIYSpxQb7h2lw`
     )
       .then((res) => res.json())
       .then((data) => {
         setComment(data.items);
       });
     fetch(
-      `https://youtube.googleapis.com/youtube/v3/channels?part=snippet&part=statistics&id=${channelId}&key=AIzaSyCiPpCXyHTU2FtWNlhbDkdX_5rLTST94xg`
+      `https://youtube.googleapis.com/youtube/v3/channels?part=snippet&part=statistics&id=${channelId}&key=AIzaSyDtlgOUocDV93ajAvmn_LXIYSpxQb7h2lw`
     )
       .then((res) => res.json())
       .then((data) => {
         setSubCount(data.items);
       });
-    if (loggedIn === true) {
+
+    if (loggedIn == true) {
       hasSub();
     }
   };

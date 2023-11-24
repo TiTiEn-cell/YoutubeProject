@@ -40,7 +40,7 @@ export default function infoChannel({ navigation, route }) {
 
   const fetchData = () => {
     fetch(
-      `https://youtube.googleapis.com/youtube/v3/search?part=snippet&channelId=${channelId}&maxResults=50&order=date&type=video&videoDefinition=high&videoDuration=long&key=`
+      `https://youtube.googleapis.com/youtube/v3/search?part=snippet&channelId=${channelId}&maxResults=50&order=date&type=video&videoDefinition=high&videoDuration=long&key=AIzaSyDtlgOUocDV93ajAvmn_LXIYSpxQb7h2lw`
     )
       .then((res) => res.json())
       .then((data) => {

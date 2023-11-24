@@ -64,19 +64,6 @@ export default function ChannelSub({navigation}) {
     </View>
   );
 }
-/*
- <View>
-        <Pressable onPress={()=>{navigation.navigate('FapTV')}}>
-          <TouchableOpacity>
-          <View>
-          <Image style={{width:60, height:60,marginHorizontal:15,}} source={require('../image/FapTVLogo.png')} />
-          <Text>Fap TV</Text>
-          </View>
-          </TouchableOpacity>
-          
-        </Pressable>
-      </View>
-*/
 const styles = StyleSheet.create({
     container:{
         flex: 1,

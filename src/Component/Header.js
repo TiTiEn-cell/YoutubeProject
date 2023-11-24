@@ -15,11 +15,14 @@ import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
 
 export default function Header() {
-  const [selected, setselected] = useState(false);
+  const [selected, setselected] = useState(false);  
   const navigation = useNavigation();
   const disPatch = useDispatch()
 
-  const logOut = useSelector(state=>{
+  const disPlayNameUser = useSelector(state=>{
+    return state.data.email
+  })
+  const loggedIn = useSelector(state=>{
     return state.loggedIn
   })
 
@@ -63,7 +66,20 @@ export default function Header() {
       {selected === true && (
         <View style={{ flex: 1, alignItems: "flex-end", marginEnd: 30,position:'absolute',zIndex:2,right:1,top:51 }}>
           <SafeAreaView style={{ width: 100, height: 100 }}>
-            <Pressable
+
+            {loggedIn?(<View style = {{
+                alignItems: "center",
+                justifyContent: "center",
+                width: 120,
+                height: 40,
+                borderWidth: 1,
+                borderColor: "black",
+                borderRadius: 10,
+                backgroundColor: "#f0f0f0",
+                marginVertical: 10,
+              }}>
+               <Text>{disPlayNameUser}</Text>
+            </View>):(<Pressable
             onPress={()=>{navigation.navigate("DangNhap"), setselected(false)}}
               style={{
                 alignItems: "center",
@@ -78,19 +94,22 @@ export default function Header() {
               }}
             >
               <Text>Đăng nhập</Text>
-            </Pressable>
+            </Pressable>)}
+
+            
+
             <Pressable
               style={{
                 alignItems: "center",
                 justifyContent: "center",
                 width: 120,
-                height: 40,
+                height: 40, 
                 borderWidth: 1,
                 borderColor: "black",
                 borderRadius: 10,
                 backgroundColor: "#f0f0f0",
               }}
-              onPress={()=>disPatch({type: 'log_out'},console.log(logOut))}
+              onPress={()=>disPatch({type: 'log_out'})}
             >
               <Text>Đăng xuất</Text>
             </Pressable>

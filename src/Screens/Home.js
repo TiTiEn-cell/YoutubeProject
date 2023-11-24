@@ -1,88 +1,144 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, ScrollView, FlatList, Dimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity, Pressable, SafeAreaView } from 'react-native';
 import {AntDesign, EvilIcons, FontAwesome5} from '@expo/vector-icons';
-import Header from '../Component/Header'
 import { useEffect, useState } from 'react';
-
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
+import Card from '../Component/Card';
 
 
 export default function HomeScreen() {   
-    const loggedIn = useSelector(state=>{
-        return state.loggedIn
-      }) 
       
     const navigation = useNavigation();
     const [videoData, setVideoData] = useState([]);
+    const [selected, setselected] = useState(false);
+
+    const disPlayNameUser = useSelector(state=>{
+        return state.data.email
+      })
+      const loggedIn = useSelector(state=>{
+        return state.loggedIn
+      })
+    
 
     const fetchDataVideo = () =>{
-        fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&type=video&key=`)
+        fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&type=video&key=AIzaSyDtlgOUocDV93ajAvmn_LXIYSpxQb7h2lw`)
         .then((res)=>res.json())
         .then((data)=>{
             setVideoData(data.items);
         })
-        console.log(loggedIn)
+        
     }
-
-    useEffect(fetchDataVideo,[]);
 
   return (
     <View style={styles.container}>
-        <View style = {
-            {zIndex:1}
-        }>
-        <Header/>
+        <View style={styles.header}>
+        <TouchableOpacity style={styles.leftHeader}
+        onPress={()=>fetchDataVideo()}
+        >
+          <AntDesign
+            style={styles.iconYoutube}
+            name="youtube"
+            size={32}
+            color="red"
+          />
+          <Text style={styles.textYoutube}>YouTube</Text>
+        </TouchableOpacity>
+
+        <View style={styles.rightHeader}>
+          <EvilIcons
+            style={styles.iconSearch}
+            name="search"
+            size={32}
+            color={"black"}
+            onPress={() => navigation.navigate("Search")}
+          />
+          <View>
+            <TouchableOpacity
+              onPress={() => {
+                if (selected === false) setselected(true);
+                else if(selected===true) setselected(false)
+              }}
+            >
+              <Image
+                source={require("../image/UserIcon.png")}
+                style={styles.imageUser}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
+      </View>
+      {selected === true && (
+        <View style={{ flex: 1, alignItems: "flex-end", marginEnd: 30,position:'absolute',zIndex:2,right:1,top:51 }}>
+          <SafeAreaView style={{ width: 100, height: 100 }}>
+
+            {loggedIn?(<View style = {{
+                alignItems: "center",
+                justifyContent: "center",
+                width: 120,
+                height: 40,
+                borderWidth: 1,
+                borderColor: "black",
+                borderRadius: 10,
+                backgroundColor: "#f0f0f0",
+                marginVertical: 10,
+              }}>
+               <Text>{disPlayNameUser}</Text>
+            </View>):(<Pressable
+            onPress={()=>{navigation.navigate("DangNhap"), setselected(false)}}
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                width: 120,
+                height: 40,
+                borderWidth: 1,
+                borderColor: "black",
+                borderRadius: 10,
+                backgroundColor: "#f0f0f0",
+                marginVertical: 10,
+              }}
+            >
+              <Text>Đăng nhập</Text>
+            </Pressable>)}
+
+            
+
+            <Pressable
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                width: 120,
+                height: 40, 
+                borderWidth: 1,
+                borderColor: "black",
+                borderRadius: 10,
+                backgroundColor: "#f0f0f0",
+              }}
+              onPress={()=>disPatch({type: 'log_out'})}
+            >
+              <Text>Đăng xuất</Text>
+            </Pressable>
+          </SafeAreaView>
+        </View>
+      )}
         
 
-<View style = {{
-    backgroundColor: 'red',
-    flex: 1
-}}>
+        <View style = {{
+            flex: 1
+        }}>
             <FlatList
-            data = {videoData}
+            data={videoData}
             renderItem={({item})=>{
-                return(
-                    <TouchableOpacity 
-    onPress = {()=> navigation.navigate('VideoPlayer',{
-        videoId: item.id.videoId, 
-        title: item.snippet.title,
-        channelName: item.snippet.channelTitle
-    })}
-    >
-<View style = {{
-    marginBottom: 20,
-    marginTop: 10,
-}}
-    
-    >
-        <Image source = {item.snippet.thumbnails.medium.url} style = {styles.video}/>
-        <View style = {styles.infoVideo}>
-            <Image  style = {styles.imageUser}/>
-            <View>
-                <Text 
-                style = {styles.textTieuDeVideo}
-                ellipsizeMode='tail'
-                numberOfLines={2}
-                >
-                    {item.snippet.title}</Text>    
-                    <View>
-                    <Text style = {styles.textNameChannel}>{item.snippet.channelTitle}</Text>
-                    </View>
-                   
-            </View>
-            
-        </View>
-          
-    </View>
-    </TouchableOpacity>
-                )
+                return <Card
+                videoId = {item.id.videoId}
+                title = {item.snippet.title}
+                channel = {item.snippet.channelTitle}
+                channelId = {item.snippet.channelId} 
+                thumbnails = {item.snippet.thumbnails.medium.url}                     
+            />
             }}
             />
-</View>
-
-            
+        </View>
         
     </View>    
   );
@@ -90,9 +146,36 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
     container:{
+        display: 'flex',
         flex: 1,
         backgroundColor: 'white'
     },
+    header: {
+        backgroundColor: "white",
+        flexDirection: "row",
+        justifyContent: "space-between",
+    },
+      leftHeader: {
+        flexDirection: "row",
+        margin: 10,
+      },
+      iconYoutube: {
+        marginLeft: 10,
+        marginRight: 5,
+      },
+      textYoutube: {
+        fontSize: 25,
+        fontWeight: "bold",
+      },
+      rightHeader: {
+        flexDirection: "row",
+        margin: 10,
+      },
+      imageUser: {
+        width: 30,
+        height: 30,
+        marginLeft: 20,
+      },
     underHeader:{
         flexDirection: 'row',
         marginLeft: 10,
@@ -135,32 +218,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#D9D9D9',
         borderRadius: 10,
     },
-    video:{
-        
-        width: '100%',
-        height: 218,
-        marginBottom: 5,
-    },
-    infoVideo:{
-        flexDirection: 'row',
-        marginLeft: 10,
-      
-    },
-    imageUser:{
-        borderRadius: 100,
-        width: 40,
-        height: 40,
-        marginRight: 10,
-        marginTop: 5,
-    },
-    textTieuDeVideo:{
-        fontSize: 18,
-        width: Dimensions.get('window').width - 50
-    },
-    textNameChannel:{
-        fontSize: 13,
-        color: 'grey',
-    }
   });
   
 

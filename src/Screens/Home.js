@@ -24,7 +24,7 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
         <View style = {
-            {zIndex:999}
+            {zIndex:1}
         }>
         <Header/>
         </View>

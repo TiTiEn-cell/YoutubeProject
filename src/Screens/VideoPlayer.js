@@ -14,6 +14,7 @@ export default function VideoPlay({navigation,route}) {
 
   const [videoData, setVideoData] = useState([]);
   const [comment, setComment] = useState([])
+  const [subCount, setSubCount] = useState('')
   const [like, setLike] = useState(false);
   const [disLike, setDislike] = useState(false);
   const [sub, setSub] = useState(false)
@@ -47,7 +48,11 @@ export default function VideoPlay({navigation,route}) {
     data.kenhDangKy.push({
         idChannel: channelId,
         avartaChannel: channelBanner,
-        nameChannel: channelName
+        nameChannel: channelName,
+        customUrl: subCount[0].snippet.customUrl,
+        subCount: subCount[0].statistics.subscriberCount,
+        videoCount: subCount[0].statistics.videoCount,
+        description: subCount[0].snippet.description
     });
     const updateRes = await fetch(`https://65598c87e93ca47020aa4601.mockapi.io/Users/${Data}`,{
         method: 'PUT',
@@ -115,6 +120,11 @@ export default function VideoPlay({navigation,route}) {
     .then((res)=>res.json())
     .then((data)=>{
       setComment(data.items)
+    })
+    fetch(`https://youtube.googleapis.com/youtube/v3/channels?part=snippet&part=statistics&id=${channelId}&key=AIzaSyDtlgOUocDV93ajAvmn_LXIYSpxQb7h2lw`)
+    .then((res)=>res.json())
+    .then((data)=>{
+      setSubCount(data.items)
     })
     hasSub();
 }
@@ -275,12 +285,22 @@ export default function VideoPlay({navigation,route}) {
         </Text>
       </View>
 
-      <View style = {{
+      <TouchableOpacity style = {{
         marginTop: 18,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between'
-      }}>
+      }}
+      onPress={()=>navigation.navigate('infoChannel',{
+        channelId: channelId,
+        channelBanner: channelBanner,
+        channelName: channelName,
+        customUrl: subCount[0].snippet.customUrl,
+        subCount: subCount[0].statistics.subscriberCount,
+        videoCount: subCount[0].statistics.videoCount,
+        description: subCount[0].snippet.description
+      })}
+      >
         <View style = {{
           flexDirection: 'row',
           alignItems: 'center',
@@ -306,6 +326,18 @@ export default function VideoPlay({navigation,route}) {
           {channelName}
         </Text>
         </View>
+
+
+        <FlatList
+        data={subCount}
+        renderItem={({item})=>{
+          return(
+            <View>
+              <Text>{formatNumber(item.statistics.subscriberCount)}</Text>
+            </View>
+          )
+        }}
+        />
 
         {loggedIn? (sub?(<TouchableOpacity style = {{
           borderWidth: 1,
@@ -361,12 +393,8 @@ export default function VideoPlay({navigation,route}) {
         }}>
           Đăng ký
         </Text>
-        </TouchableOpacity>))}
-        
-        
-
-        
-      </View>
+        </TouchableOpacity>))}  
+      </TouchableOpacity>
       <View style = {{
         marginTop: 18,
         flexDirection: 'row',

@@ -5,60 +5,57 @@ import {
   View,
   Image,
   TouchableOpacity,
-  Pressable,
   FlatList,
+  ScrollView,
+  Dimensions
 } from "react-native";
-import { AntDesign, EvilIcons, FontAwesome5 } from "@expo/vector-icons";
-import Header from "../Component/Header";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function FapTV() {
-  const data = [
-    {
-      thumbnail: require("./../image/comnguoi295.png"),
-      title: "com nguoi 259",
-      view: "76 tr luot xem",
-      time: "4 ngay truoc",
-      id: "1",
-    },
-    {
-      thumbnail: require("./../image/comnguoi295.png"),
-      title: "com nguoi 259",
-      view: "76 tr luot xem",
-      time: "4 ngay truoc",
-      id: "2",
-    },
-  ];
-  console.log(data)
+export default function infoChannel({navigation,route}) {
+  const {channelId, channelBanner, channelName, customUrl, subCount, videoCount, description} = route.params
 
   const [selected, setselected] = useState("video");
+  const [video, setVideo] = useState([]);
+
+  const fetchData = () =>{
+    fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&channelId=${channelId}&maxResults=50&order=date&type=video&videoDefinition=high&videoDuration=long&key=AIzaSyDtlgOUocDV93ajAvmn_LXIYSpxQb7h2lw`)
+    .then((res)=>res.json())
+    .then((data)=>{
+      setVideo(data.items)
+    })
+  }
+
+  useEffect(fetchData,[])
+  
   return (
     <View style={styles.container}>
+      <ScrollView>
+
+    
       <View style={styles.header}>
         <View style={styles.avatar}>
           <Image
             style={styles.avatar}
-            source={require("./../image/FapTVLogo.png")}
+            source={channelBanner}
           />
         </View>
         <View>
-          <Text style={{ fontSize: 25, fontWeight: "bold" }}>FAPTV</Text>
+          <Text style={{ fontSize: 25, fontWeight: "bold" }}>{channelName}</Text>
           <View style={{ flexDirection: "row" }}>
-            <Text style={{ marginTop: 5 }}>@faptv</Text>
+            <Text style={{ marginTop: 5 }}>{customUrl}</Text>
             <Text style={{ marginTop: 5, marginHorizontal: 5 }}>
-              1.8 Tr người đăng ký
+             {subCount} người đăng ký
             </Text>
           </View>
-          <Text style={{ marginTop: 5, marginHorizontal: 5 }}>1,3 N Video</Text>
+          <Text style={{ marginTop: 5, marginHorizontal: 5 }}>{videoCount} Video</Text>
         </View>
       </View>
-      <Text style={{ marginTop: 5, marginHorizontal: 5 }}>
+      <Text style={{ marginTop: 5, marginHorizontal: 5, fontSize: 18 }}>
         {" "}
-        Cơm Nguội - Sitcom Phim Hài Ngắn liên tục ra mắt hàng tuần sẽ giúp khán
-        giả có những tiếng cười giải trí và cái nhìn
+        {description}
       </Text>
       <View style={{ justifyContent: "center", alignItems: "center" }}>
-        <Pressable
+        <TouchableOpacity
           style={{
             width: "90%",
             height: 40,
@@ -72,7 +69,7 @@ export default function FapTV() {
           <Text style={{ color: "white", fontSize: 15, fontWeight: "bold" }}>
             Đăng ký
           </Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
       <View
         style={{
@@ -82,7 +79,7 @@ export default function FapTV() {
           borderBottomWidth: 1,
         }}
       >
-        <Pressable
+        <TouchableOpacity
           onPress={() => setselected("video")}
           style={
             selected === "video"
@@ -98,8 +95,8 @@ export default function FapTV() {
           >
             Video
           </Text>
-        </Pressable>
-        <Pressable
+        </TouchableOpacity>
+        {/* <Pressable
           onPress={() => setselected("short")}
           style={
             selected === "short"
@@ -132,38 +129,44 @@ export default function FapTV() {
           >
             Tim Kiem
           </Text>
-        </Pressable>
+        </Pressable> */}
       </View>
       <FlatList
-        data={data}
-        keyExtractor={(item) => item.id}
+        data={video}
+        //keyExtractor={(item) => item.id}
         renderItem={({item}) => {
           return (
-            <View style={styles.header}>
-              <View style={{}}>
+            <TouchableOpacity>
+
                 <Image
-                  style={{ width: 150, height: 100, resizeMode: "contain" }}
-                  source={item.thumbnail}
+                  style={{ width: '100%', height: 218, marginTop: 10, }}
+                  source={item.snippet.thumbnails.medium.url}
                 />
-              </View>
-              <View style={{ marginHorizontal: 15 }}>
-                <Text style={{ fontSize: 25, fontWeight: "bold" }}>
-                  {item.title}
+
+              <View style={{ marginHorizontal: 15, marginBottom: 15, }}>
+                <Text style={{ fontSize: 18,  width: Dimensions.get('window').width - 40}} 
+                ellipsizeMode="tail"
+                numberOfLines={2}
+                >
+                  {item.snippet.title}
                 </Text>
                
                  
-                  <Text style={{ }}>
+                  {/* <Text style={{ }}>
                     {item.view}
-                  </Text>
+                  </Text> */}
                
-                <Text >
-                 {item.time}
+                <Text style = {{
+                  fontSize:15, color:'grey'
+                }}>
+                 {item.snippet.publishTime}
                 </Text>
               </View>
-            </View>
+            </TouchableOpacity>
           );
         }}
       />
+        </ScrollView>
     </View>
   );
 }
@@ -173,9 +176,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
   },
-  header: {
-    flexDirection: "row",
-    margin: 15,
+  header:{
+    flexDirection: 'row'
   },
   avatar: {
     width: 100,

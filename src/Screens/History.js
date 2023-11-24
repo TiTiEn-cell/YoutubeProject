@@ -21,7 +21,9 @@ export default function History({navigation}) {
 
   return (
     <View style={styles.container}>
-        <View>
+        <View style = {
+            {zIndex:1}
+        }>
           <Header/>
         </View>
         <View style = {{

@@ -2,8 +2,6 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image ,FlatList, TouchableOpacity, Pressable} from 'react-native';
 import {AntDesign, EvilIcons, FontAwesome5} from '@expo/vector-icons'
 import Header from '../Component/Header';
-
-import { FapTV } from './FapTV';
 import { useSelector } from 'react-redux';
 
 
@@ -14,7 +12,9 @@ export default function ChannelSub({navigation}) {
 
   return (
     <View style={styles.container}>
-          <View>
+          <View style = {
+            {zIndex:1}
+        }>
           <Header/>
           </View>
         <View>
@@ -25,7 +25,15 @@ export default function ChannelSub({navigation}) {
       
       data={Data}
       renderItem={({item})=>(
-        <TouchableOpacity onPress={()=>{navigation.navigate('FapTVsub')}} 
+        <TouchableOpacity onPress={()=>navigation.navigate('infoChannel',{
+          channelId: item.idChannel, 
+          channelBanner:item.avartaChannel, 
+          channelName:item.nameChannel, 
+          customUrl: item.customUrl, 
+          subCount: item.subCount, 
+          videoCount: item.videoCount, 
+          description: item.description
+        })} 
         style={
             {
                 marginHorizontal:10,
@@ -73,7 +81,6 @@ const styles = StyleSheet.create({
     container:{
         flex: 1,
         backgroundColor: 'white',
-
     },
   });
   

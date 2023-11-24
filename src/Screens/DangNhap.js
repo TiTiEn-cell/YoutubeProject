@@ -1,8 +1,7 @@
 import { StyleSheet, Text, View, ImageBackground,TextInput,TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-
+import { Ionicons } from '@expo/vector-icons'
 
 const url = 'https://65598c87e93ca47020aa4601.mockapi.io/Users'
 
@@ -46,6 +45,7 @@ const DangNhap = ({navigation}) => {
         alignItems: 'center',
       }}
       >
+        
         <View style = {{
             position: 'absolute',
             width: '100%',
@@ -53,6 +53,13 @@ const DangNhap = ({navigation}) => {
             backgroundColor: 'black',
             opacity: 0.5,
         }}>
+            <TouchableOpacity style = {{
+            position: 'absolute',top: 10, left: 10,
+        }}
+        onPress={()=>navigation.goBack()}
+        >
+        <Ionicons name='arrow-back' size={32} color={'white'}/>
+        </TouchableOpacity>
         </View>
         <View style = {{
             borderWidth: 1,

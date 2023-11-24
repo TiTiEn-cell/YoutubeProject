@@ -12,13 +12,14 @@ import VideoPlayer from './src/Screens/VideoPlayer';
 import Card from './src/Component/Card';
 import DangNhap from './src/Screens/DangNhap';
 import DangKy from './src/Screens/DangKy';
-import FapTV from './src/Screens/FapTV';
+import infoChannel from './src/Screens/infoChannel'; 
 import { Provider } from 'react-redux';
 import { createStore } from '@reduxjs/toolkit';
 import { reducer } from './src/Component/Reducer';
 
 
 //https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=song&type=video&key=AIzaSyAkR64LHntE29CluL5A6NOjZp-pwqRZ3oo
+//AIzaSyDtlgOUocDV93ajAvmn_LXIYSpxQb7h2lw
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
 const store = createStore(reducer)
@@ -65,7 +66,7 @@ export default function App() {
         <Stack.Screen name='Card' component={Card}/>
         <Stack.Screen name='DangNhap' component={DangNhap} options={{ headerShown: false }}/>
         <Stack.Screen name='DangKy' component={DangKy} options={{ headerShown: false }}/>
-        <Stack.Screen name='FapTVsub' component={FapTV} options={{ headerShown: false }}/>
+        <Stack.Screen name='infoChannel' component={infoChannel}/>
       </Stack.Navigator>
     </NavigationContainer>
     </Provider>

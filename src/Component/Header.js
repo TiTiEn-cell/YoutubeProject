@@ -53,14 +53,14 @@ export default function Header() {
         </View>
       </View>
       {selected === true && (
-        <View style={{ flex: 1, alignItems: "flex-end", marginEnd: 50,position:'absolute',zIndex:999,right:0,top:51 }}>
+        <View style={{ flex: 1, alignItems: "flex-end", marginEnd: 30,position:'absolute',zIndex:2,right:1,top:51 }}>
           <SafeAreaView style={{ width: 100, height: 100 }}>
             <Pressable
             onPress={()=>{navigation.navigate("DangNhap"), setselected(false)}}
               style={{
                 alignItems: "center",
                 justifyContent: "center",
-                width: 150,
+                width: 120,
                 height: 40,
                 borderWidth: 1,
                 borderColor: "black",
@@ -75,7 +75,7 @@ export default function Header() {
               style={{
                 alignItems: "center",
                 justifyContent: "center",
-                width: 150,
+                width: 120,
                 height: 40,
                 borderWidth: 1,
                 borderColor: "black",
@@ -102,8 +102,6 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     flexDirection: "row",
     justifyContent: "space-between",
-    borderBottomColor: "gray",
-    borderBottomWidth: 1,
 },
   leftHeader: {
     flexDirection: "row",

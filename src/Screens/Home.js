@@ -22,7 +22,7 @@ export default function HomeScreen() {
     
 
     const fetchDataVideo = () =>{
-        fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&type=video&key=AIzaSyDtlgOUocDV93ajAvmn_LXIYSpxQb7h2lw`)
+        fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&type=video&key=AIzaSyDtlgOUocDV93ajAvmn_LXIYSpxQb7h2lw`)
         .then((res)=>res.json())
         .then((data)=>{
             setVideoData(data.items);

@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import Card from "../Component/Card";
 
 const url = "https://65598c87e93ca47020aa4601.mockapi.io/Users";
 
@@ -64,54 +65,7 @@ export default function infoChannel({ navigation, route }) {
     }
   };
 
-  const updateKenhDaDangKy = async () => {
-    const res = await fetch(
-      `https://65598c87e93ca47020aa4601.mockapi.io/Users/${Data}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    const data = await res.json();
-    if (!data.kenhDangKy) {
-      data.kenhDangKy = [];
-    }
-    data.kenhDangKy.push({
-      idChannel: channelId,
-      avartaChannel: channelBanner,
-      nameChannel: channelName,
-      customUrl: customUrl,
-      subCount: subCount,
-      videoCount: videoCount,
-      description: description,
-    });
-    const updateRes = await fetch(
-      `https://65598c87e93ca47020aa4601.mockapi.io/Users/${Data}`,
-      {
-        method: "PUT",
-        headers: {
-          Accept: "application/json",
-          "Content-type": "application/json; charset=UTF-8",
-        },
-        body: JSON.stringify(data),
-      }
-    );
-  };
 
-  const updateDataAndFetch = async () => {
-    await updateKenhDaDangKy(); // Cập nhật dữ liệu trong Redux
-    const response = await fetch(url); // Yêu cầu mới để lấy dữ liệu từ API
-    if (response.ok) {
-      const data = await response.json();
-      for (var i = 0; i < data.length; i++) {
-        if (Data == data[i].id) {
-          dispatch({ type: "addData", payload: data[i] });
-        }
-      }
-    }
-  };
 
   const unSub = async () => {
     const userRes = await fetch(
@@ -151,6 +105,50 @@ export default function infoChannel({ navigation, route }) {
       }
     }
   };
+
+  const updateVideoDaXem = async ()=>{
+    const res = await fetch(`https://65598c87e93ca47020aa4601.mockapi.io/Users/${Data}`,{
+        method: 'GET',
+        headers: {
+        'Content-Type': 'application/json',
+    },
+    });
+    const data = await res.json();
+    if(!data.videoDaXem){
+        data.videoDaXem = [];
+    }
+    data.videoDaXem.push({
+        idVideo: props.videoId,
+        thumbnailURL: props.thumbnails,
+        titleVideo: props.title,
+        channelName: props.channel,
+        channelBanner: channel[0].snippet.thumbnails.default.url,
+        idChannel: props.channelId
+    });
+    const updateRes = await fetch(`https://65598c87e93ca47020aa4601.mockapi.io/Users/${Data}`,{
+        method: 'PUT',
+        headers:{
+            'Accept': "application/json",
+            "Content-type": "application/json; charset=UTF-8",
+        },
+        body:JSON.stringify(data)
+    })
+    
+    
+  }
+
+  const updateVideoDataAndFetch = async () => {
+      await updateVideoDaXem(); // Cập nhật dữ liệu trong Redux
+      const response = await fetch(url); // Yêu cầu mới để lấy dữ liệu từ API
+      if (response.ok) {
+        const data = await response.json();
+        for (var i = 0; i < data.length; i++) {
+          if (Data == data[i].id) {
+            dispatch({type:'addData', payload: data[i]})
+          }
+        }
+      } 
+    }
 
   return (
     <View style={styles.container}>
@@ -320,42 +318,14 @@ export default function infoChannel({ navigation, route }) {
         </View>
         <FlatList
           data={video}
-          //keyExtractor={(item) => item.id}
-          renderItem={({ item }) => {
-            return (
-              <TouchableOpacity>
-                <Image
-                  style={{ width: "100%", height: 218, marginTop: 10 }}
-                  source={item.snippet.thumbnails.medium.url}
-                />
-
-                <View style={{ marginHorizontal: 15, marginBottom: 15 }}>
-                  <Text
-                    style={{
-                      fontSize: 18,
-                      width: Dimensions.get("window").width - 40,
-                    }}
-                    ellipsizeMode="tail"
-                    numberOfLines={2}
-                  >
-                    {item.snippet.title}
-                  </Text>
-
-                  {/* <Text style={{ }}>
-                    {item.view}
-                  </Text> */}
-
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      color: "grey",
-                    }}
-                  >
-                    {item.snippet.publishTime}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            );
+          renderItem={({item})=>{
+              return <Card
+              videoId = {item.id.videoId}
+              title = {item.snippet.title}
+              channel = {item.snippet.channelTitle}
+              channelId = {item.snippet.channelId} 
+              thumbnails = {item.snippet.thumbnails.medium.url}                     
+          />
           }}
         />
       </ScrollView>

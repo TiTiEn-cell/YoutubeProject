@@ -12,7 +12,7 @@ export default function Search({navigation}) {
 
     const fetchData = ()=>{
         setLoading(true)
-        fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=${text}&type=video&key=AIzaSyDtlgOUocDV93ajAvmn_LXIYSpxQb7h2lw`)
+        fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&q=${text}&type=video&key=AIzaSyDtlgOUocDV93ajAvmn_LXIYSpxQb7h2lw`)
         .then((res)=>res.json())
         .then((data)=>{
             setLoading(false)       

@@ -122,21 +122,21 @@ export default function VideoPlay({ navigation, route }) {
 
   const fetchData = () => {
     fetch(
-      `https://youtube.googleapis.com/youtube/v3/videos?part=snippet&part=statistics&part=topicDetails&id=${videoId}&maxResults=10&key=AIzaSyAkR64LHntE29CluL5A6NOjZp-pwqRZ3oo`
+      `https://youtube.googleapis.com/youtube/v3/videos?part=snippet&part=statistics&part=topicDetails&id=${videoId}&maxResults=10&key=AIzaSyDO5ZGAT_uFEYlBGoVFpMwBMiyyvRZevko`
     )
       .then((res) => res.json())
       .then((data) => {
         setVideoData(data.items);
       });
     fetch(
-      `https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet&part=id&maxResults=50&videoId=${videoId}&key=AIzaSyAkR64LHntE29CluL5A6NOjZp-pwqRZ3oo`
+      `https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet&part=id&maxResults=50&videoId=${videoId}&key=AIzaSyDO5ZGAT_uFEYlBGoVFpMwBMiyyvRZevko`
     )
       .then((res) => res.json())
       .then((data) => {
         setComment(data.items);
       });
     fetch(
-      `https://youtube.googleapis.com/youtube/v3/channels?part=snippet&part=statistics&id=${channelId}&key=AIzaSyAkR64LHntE29CluL5A6NOjZp-pwqRZ3oo`
+      `https://youtube.googleapis.com/youtube/v3/channels?part=snippet&part=statistics&id=${channelId}&key=AIzaSyDO5ZGAT_uFEYlBGoVFpMwBMiyyvRZevko`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -623,7 +623,7 @@ export default function VideoPlay({ navigation, route }) {
                 justifyContent: "space-between",
               }}
               onPress={() =>
-                navigation.navigate("infoChannel", {
+                navigation.navigate("Channel", {
                   channelId: channelId,
                   channelBanner: channelBanner,
                   channelName: channelName,

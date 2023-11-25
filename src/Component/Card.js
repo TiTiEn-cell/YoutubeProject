@@ -62,7 +62,7 @@ export default function Card(props) {
         }
 
       const fetchData = ()=>{
-        fetch(`https://youtube.googleapis.com/youtube/v3/channels?part=snippet&part=id&id=${props.channelId}&key=AIzaSyAkR64LHntE29CluL5A6NOjZp-pwqRZ3oo`)
+        fetch(`https://youtube.googleapis.com/youtube/v3/channels?part=snippet&part=id&id=${props.channelId}&key=AIzaSyDO5ZGAT_uFEYlBGoVFpMwBMiyyvRZevko`)
         .then((res)=>res.json())
         .then((data)=>{     
             setChannel(data.items)
@@ -77,7 +77,7 @@ export default function Card(props) {
     <TouchableOpacity 
     onPress = {()=>{updateVideoDaXem(), 
         updateDataAndFetch(),
-        navigation.navigate('VideoPlayer',{
+        navigation.navigate('Video',{
             videoId: props.videoId, 
             title: props.title,
             channelName: props.channel,

@@ -42,7 +42,7 @@ export default function History({navigation}) {
           data={data}
           renderItem={({item})=>{
             return(
-              <TouchableOpacity onPress = {()=> navigation.navigate('VideoPlayer',{
+              <TouchableOpacity onPress = {()=> navigation.navigate('Video',{
                 videoId: item.idVideo, 
                 title: item.titleVideo,
                 channelName: item.channelName,

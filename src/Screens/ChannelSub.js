@@ -25,7 +25,7 @@ export default function ChannelSub({navigation}) {
       
       data={Data}
       renderItem={({item})=>(
-        <TouchableOpacity onPress={()=>navigation.navigate('infoChannel',{
+        <TouchableOpacity onPress={()=>navigation.navigate('Channel',{
           channelId: item.idChannel, 
           channelBanner:item.avartaChannel, 
           channelName:item.nameChannel, 

@@ -41,7 +41,7 @@ export default function infoChannel({ navigation, route }) {
 
   const fetchData = () => {
     fetch(
-      `https://youtube.googleapis.com/youtube/v3/search?part=snippet&channelId=${channelId}&maxResults=50&order=date&type=video&videoDefinition=high&videoDuration=long&key=AIzaSyAkR64LHntE29CluL5A6NOjZp-pwqRZ3oo`
+      `https://youtube.googleapis.com/youtube/v3/search?part=snippet&channelId=${channelId}&maxResults=50&order=date&type=video&videoDefinition=high&videoDuration=long&key=AIzaSyDO5ZGAT_uFEYlBGoVFpMwBMiyyvRZevko`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -150,6 +150,55 @@ export default function infoChannel({ navigation, route }) {
       } 
     }
 
+    const updateKenhDaDangKy = async () => {
+      const res = await fetch(
+        `https://65598c87e93ca47020aa4601.mockapi.io/Users/${Data}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await res.json();
+      if (!data.kenhDangKy) {
+        data.kenhDangKy = [];
+      }
+      data.kenhDangKy.push({
+        idChannel: channelId,
+        avartaChannel: channelBanner,
+        nameChannel: channelName,
+        customUrl: customUrl,
+        subCount: subCount,
+        videoCount: videoCount,
+        description: description,
+      });
+      const updateRes = await fetch(
+        `https://65598c87e93ca47020aa4601.mockapi.io/Users/${Data}`,
+        {
+          method: "PUT",
+          headers: {
+            Accept: "application/json",
+            "Content-type": "application/json; charset=UTF-8",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+    };
+  
+    const updateChannelDangKyDataAndFetch = async () => {
+      await updateKenhDaDangKy(); // Cập nhật dữ liệu trong Redux
+      const response = await fetch(url); // Yêu cầu mới để lấy dữ liệu từ API
+      if (response.ok) {
+        const data = await response.json();
+        for (var i = 0; i < data.length; i++) {
+          if (Data == data[i].id) {
+            dispatch({ type: "addData", payload: data[i] });
+          }
+        }
+      }
+    };
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -221,7 +270,7 @@ export default function infoChannel({ navigation, route }) {
                   marginVertical: 20,
                 }}
                 onPress={() => {
-                  handleSub(), updateKenhDaDangKy(), updateDataAndFetch();
+                  handleSub(), updateKenhDaDangKy(), updateChannelDangKyDataAndFetch();
                 }}
               >
                 <Text

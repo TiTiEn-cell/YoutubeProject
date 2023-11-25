@@ -63,11 +63,11 @@ export default function App() {
       <Stack.Navigator >
         <Stack.Screen name='MainHome' component={mainHome} options={{ headerShown: false }}/>
         <Stack.Screen name='Search' component={Search} options={{ headerShown: false }}/>
-        <Stack.Screen name='VideoPlayer' component={VideoPlayer}/>
+        <Stack.Screen name='Video' component={VideoPlayer}/>
         <Stack.Screen name='Card' component={Card}/>
         <Stack.Screen name='DangNhap' component={DangNhap} options={{ headerShown: false }}/>
         <Stack.Screen name='DangKy' component={DangKy} options={{ headerShown: false }}/>
-        <Stack.Screen name='infoChannel' component={infoChannel}/>
+        <Stack.Screen name='Channel' component={infoChannel}/>
       </Stack.Navigator>
     </NavigationContainer>
     </Provider>
